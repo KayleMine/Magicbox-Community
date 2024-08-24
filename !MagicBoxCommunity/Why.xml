@@ -32,7 +32,7 @@
 	<Script file="Butwhy\Core\system\rotation\timer.lua" />
 	<Script file="Butwhy\Core\system\support\patches.lua" />
 	<Script file="Butwhy\Core\system\support\ready.lua" />
-	<Script file="Butwhy\Support\Login_Frame.lua" />
+	<Script file="Butwhy\Support\LoginFrame.lua" />
 	<Script file="Butwhy\Support\Support.lua" />
 	
 
