@@ -30,8 +30,7 @@ local settings = {
 
 	}
 }
-
-    configWindow = dark_addon.interface.builder.buildGUI(settings)
+  configWindow = dark_addon.interface.builder.buildGUI(settings)
 
   dark_addon.interface.buttons.add_toggle({
     name = 'settings',
@@ -48,10 +47,10 @@ local settings = {
       color2 = dark_addon.interface.color.red
     },
     callback = function(self)
-      if configWindowtwo.parent:IsShown() then
-        configWindowtwo.parent:Hide()
+      if configWindow.parent:IsShown() then
+        configWindow.parent:Hide()
       else
-        configWindowtwo.parent:Show()
+        configWindow.parent:Show()
       end
     end
   })

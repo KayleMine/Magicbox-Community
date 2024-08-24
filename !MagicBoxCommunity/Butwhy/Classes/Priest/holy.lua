@@ -20,7 +20,7 @@ function interface()
 --CreateMacroIfNotExist("Targs", "/fd toggle useTarget")
 --CreateMacroIfNotExist("Purge", "/fd toggle purgetar")
 --CreateMacroIfNotExist("Filler", "/fd toggle filler")
-local settingss = {
+local settings = {
 	key      = "holy_community",
 	title    = "Holy Priest",
 	width    = 420,
@@ -34,8 +34,7 @@ local settingss = {
 	}
 }
 
-configWindowtwo = dark_addon.interface.builder.buildGUI(settingss)
-
+  configWindow = dark_addon.interface.builder.buildGUI(settings)
 
   dark_addon.interface.buttons.add_toggle({
     name = 'settings',
@@ -52,10 +51,10 @@ configWindowtwo = dark_addon.interface.builder.buildGUI(settingss)
       color2 = dark_addon.interface.color.red
     },
     callback = function(self)
-      if configWindowtwo.parent:IsShown() then
-        configWindowtwo.parent:Hide()
+      if configWindow.parent:IsShown() then
+        configWindow.parent:Hide()
       else
-        configWindowtwo.parent:Show()
+        configWindow.parent:Show()
       end
     end
   })

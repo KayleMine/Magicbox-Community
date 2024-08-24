@@ -12,7 +12,10 @@ local function combat()
 end
 
 local function resting()
-
+if castable(6673) and player.buff(6673).down then
+	cast(6673)
+	return true
+end
 end
 
 
@@ -49,14 +52,13 @@ local settings = {
       color2 = dark_addon.interface.color.red
     },
     callback = function(self)
-      if configWindowtwo.parent:IsShown() then
-        configWindowtwo.parent:Hide()
+      if configWindow.parent:IsShown() then
+        configWindow.parent:Hide()
       else
-        configWindowtwo.parent:Show()
+        configWindow.parent:Show()
       end
     end
   })
-
 end
 
 dark_addon.rotation.register(

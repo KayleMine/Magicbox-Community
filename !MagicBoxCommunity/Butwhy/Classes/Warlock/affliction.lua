@@ -30,8 +30,8 @@ local example = {
     }
 }
 
-  configWindow = dark_addon.interface.builder.buildGUI(example)
- 
+ configWindow = dark_addon.interface.builder.buildGUI(example)
+
   dark_addon.interface.buttons.add_toggle({
     name = 'settings',
     label = 'Rotation Settings',
@@ -47,14 +47,13 @@ local example = {
       color2 = dark_addon.interface.color.red
     },
     callback = function(self)
-      if configWindowtwo.parent:IsShown() then
-        configWindowtwo.parent:Hide()
+      if configWindow.parent:IsShown() then
+        configWindow.parent:Hide()
       else
-        configWindowtwo.parent:Show()
+        configWindow.parent:Show()
       end
     end
   })
- 
 end
 
 dark_addon.rotation.register({
