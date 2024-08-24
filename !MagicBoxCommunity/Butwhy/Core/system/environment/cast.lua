@@ -4,16 +4,6 @@ local lastcasted_target = nil
 
 function _CastSpellByName(spell, target)
 	local target = target or "target"
-	
-	if type(spell) == 'table' then
-	_spelltable = spell
-	local _, name = _spelltable
-		spell = name
-	else
-		spell = spell
-	end
-	
-	
 	secured = false
 	while not secured do
         RunScript(
@@ -67,6 +57,7 @@ function _CastGroundSpellByName(spell, target)
         end
       end
 end
+
 local lastprint = 0
 
 function _CastSpellByID(spell, target)
