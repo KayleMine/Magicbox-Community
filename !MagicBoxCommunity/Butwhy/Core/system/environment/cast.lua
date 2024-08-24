@@ -4,18 +4,6 @@ local lastcasted_target = nil
 
 function _CastSpellByName(spell, target)
   local target = target or "target"
-  if dark_addon.luabox == true then
-    __LB__.Unlock(CastSpellByName, spell, target)
-	lastcasted_target = target
-    dark_addon.console.debug(4, "cast", "red", spell .. " on " .. target)
-   -- -- --dark_addon.interface.status(spell)
-  else
-    if dark_addon.adv_protected then
-      CastSpellByName(spell, target)
-	  lastcasted_target = target
-      dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
-     -- -- --dark_addon.interface.status(spell)
-    else
       secured = false
       while not secured do
         RunScript(
@@ -33,23 +21,12 @@ function _CastSpellByName(spell, target)
         if secured then
 		  lastcasted_target = target
           dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
-          -- --dark_addon.interface.status(spell)
         end
       end
-    end
-  end
 end
 
 function _CastGroundSpellByName(spell, target)
   local target = target or "target"
-  if dark_addon.adv_protected then
-    C_Macro.RunMacroText("/cast [@cursor] " .. spell, 255)
-    dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
-    -- --dark_addon.interface.status(spell)
-  else
-    if dark_addon.luabox then
-		print('lol nice joke')
-    else
       secured = false
       while not secured do
         RunScript(
@@ -66,11 +43,8 @@ function _CastGroundSpellByName(spell, target)
         )
         if secured then
           dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
-          -- --dark_addon.interface.status(spell)
         end
       end
-    end
-  end
 end
 local lastprint = 0
 function _CastSpellByID(spell, target)
@@ -95,14 +69,6 @@ function _CastGroundSpellByID(spell, target)
 end
 
 function _SpellStopCasting()
-  if dark_addon.adv_protected then
-    SpellStopCasting()
-  else
-    if dark_addon.luabox then
-      __LB__.Unlock(SpellStopCasting())
-      dark_addon.console.debug(4, "macro", "red", text)
-      -- --dark_addon.interface.status("LB Macro")
-    else
       secured = false
       while not secured do
         RunScript(
@@ -117,15 +83,10 @@ function _SpellStopCasting()
       ]]
         )
       end
-    end
-  end
 end
 
 local function auto_attack()
   if not C_Spell.IsCurrentSpell(6603) then
-    if dark_addon.adv_protected then
-      CastSpellByID(6603)
-    else
       secured = false
       while not secured do
         RunScript(
@@ -140,15 +101,11 @@ local function auto_attack()
         ]]
         )
       end
-    end
   end
 end
 
 local function auto_shot()
   if not IsCurrentSpell(75) then
-    if dark_addon.adv_protected then
-      CastSpellByID(75)
-    else
       secured = false
       while not secured do
         RunScript(
@@ -163,21 +120,10 @@ local function auto_shot()
         ]]
         )
       end
-    end
   end
 end
 
 function RunMacroText(text)
-  if dark_addon.adv_protected then
-    C_Macro.RunMacroText(text, 255)
-    dark_addon.console.debug(2, "macro", "red", text)
-    -- --dark_addon.interface.status("Macro")
-  else
-    if dark_addon.luabox then
-      print('pal not funny')
-      dark_addon.console.debug(4, "macro", "red", text)
-      -- --dark_addon.interface.status("LB Macro")
-    else
       secured = false
       while not secured do
         RunScript(
@@ -194,11 +140,8 @@ function RunMacroText(text)
         )
         if secured then
           dark_addon.console.debug(2, "macro", "red", text)
-          -- --dark_addon.interface.status("Macro")
         end
       end
-    end
-  end
 end
 
 dark_addon.tmp.store("lastcast", spell)
@@ -324,93 +267,12 @@ function dark_addon.environment.virtual.targets.lastcasted_target()
   return lastcasted_target
 end
 
-if (GetLocale() == "ruRU") then
-
 local timer
 timer =
   C_Timer.NewTicker(
   0.5,
   function()
-    local lb = _G["__LB__"]
-    local islbloaded = __LB__
-    if not dark_addon.protected and lb and islbloaded ~= nil then
-		if stateval == 2 then 
-			dark_addon.log("LUABOX найден! Работаем!")
-			--Splash('\n'.."LUABOX!"..'\n|cff4384D0'.."Включаю...."..'\n|cff0e89d1')
-		end
-      dark_addon.luaboxdev = true
-      dark_addon.luabox = true
-      dark_addon.protect_version = "777"
-      dark_addon.protected = true
-      dark_addon.adv_protected = false
-      load_apicompat()
-      load_magellan()
-      timer:Cancel()
-    else
-      if not lb and SendHTTPRequest then
-		if stateval == 2 then 
-			dark_addon.log("ЕВТ найден! Работаем!")
-			--Splash('\n'.."ЕВТ!"..'\n|cff4384D0'.."Включаю...."..'\n|cff0e89d1')
-		end
-        dark_addon.adv_protected = true
-        dark_addon.protect_version = "777"
-        dark_addon.luabox = false
-        dark_addon.protected = true
-        timer:Cancel()
-      end
-      if not dark_addon.adv_protected and not dark_addon.luabox and is_unlocked() then
-		stateval = dark_addon.settings.fetch('ssc')
-		if stateval == 2 then 
-			dark_addon.log("Анлокер найден! Работаем!")
-			Splash('\n'.."Анлокер!"..'\n|cff4384D0'.."Включаю...."..'\n|cff0e89d1')
-		end
-        dark_addon.protected = true
-        dark_addon.protect_version = "777"
-        dark_addon.adv_protected = false
-        dark_addon.luabox = false
-        timer:Cancel()
-      end
-    end
-  end
-)
-
-else
-
-
-local timer
-timer =
-  C_Timer.NewTicker(
-  0.5,
-  function()
-    local lb = _G["__LB__"]
-    local islbloaded = __LB__
-    if not dark_addon.protected and lb and islbloaded ~= nil then
-		stateval = dark_addon.settings.fetch('ssc')
-		if stateval == 2 then 
-			dark_addon.log("LUABox Found! Enabled!")
-			--Splash('\n'.."LUABox Found!"..'\n|cff4384D0'.."Enabled...."..'\n|cff0e89d1')
-		end
-      dark_addon.luaboxdev = true
-      dark_addon.luabox = true
-      dark_addon.protect_version = "777"
-      dark_addon.protected = true
-      dark_addon.adv_protected = false
-      load_apicompat()
-      load_magellan()
-      timer:Cancel()
-    else
-      if not lb and SendHTTPRequest then
-		stateval = dark_addon.settings.fetch('ssc')
-		if stateval == 2 then 
-			dark_addon.log("LUABox Found! Enabled!")
-		end		
-        dark_addon.adv_protected = true
-        dark_addon.protect_version = "777"
-        dark_addon.luabox = false
-        dark_addon.protected = true
-        timer:Cancel()
-      end
-      if not dark_addon.adv_protected and not dark_addon.luabox and is_unlocked() then
+      if not dark_addon.adv_protected and is_unlocked() then
 		stateval = dark_addon.settings.fetch('ssc')
 		if stateval == 2 then 
 			dark_addon.log("LUA Unlocker Found! Enabled!")
@@ -422,13 +284,8 @@ timer =
         dark_addon.luabox = false
         timer:Cancel()
       end
-    end
   end
 )
-
-end
-
-
 
 dark_addon.event.register(
   "UNIT_SPELLCAST_SUCCEEDED",

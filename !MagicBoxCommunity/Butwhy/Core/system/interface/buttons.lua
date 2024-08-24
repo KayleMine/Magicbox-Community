@@ -263,7 +263,6 @@ function dark_addon.interface.buttons.add_toggle(button)
       self.frame.text:SetText(button.on.label)
       self:set_color_on(1)
       if button.label then
-        --dark_addon.interface.status_override(button.label .. ' work? again?', 1)
       end
     end,
     set_color_off = function(self, ratio)
@@ -283,7 +282,6 @@ function dark_addon.interface.buttons.add_toggle(button)
       self.frame.text:SetText(button.off.label)
       self:set_color_off(1)
       if button.label then
-        --dark_addon.interface.status_override(button.label .. ' disable.', 1)
       end
     end,
     callback = function(self)
@@ -338,14 +336,12 @@ function dark_addon.interface.buttons.add_toggleNoColor(button)
     toggle_on = function(self)
       self.frame.text:SetText(button.on.label)
       if button.label then
-        --dark_addon.interface.status_override(button.label .. ' work? again?', 1)
       end
     end,
 
     toggle_off = function(self)
       self.frame.text:SetText(button.off.label)
       if button.label then
-        --dark_addon.interface.status_override(button.label .. ' disable.', 1)
       end
     end,
     callback = function(self)

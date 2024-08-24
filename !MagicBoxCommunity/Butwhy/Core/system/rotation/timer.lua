@@ -95,7 +95,7 @@ local f_spell = 0
 local f_unit = player
 local f_icon = 0
  
-function dark_addon.rotation.pause(spell, unit)
+function dark_addon.rotation.pause(spell, unit) -- ugh oh, need to rewrite this and above...
     icon = FlexIcon(spell, 25,25)
     cooldown_time = dark_addon.environment.hooks.spell(spell).cooldown
     castable = dark_addon.environment.hooks.castable(spell)
@@ -122,7 +122,6 @@ function dark_addon.rotation.tick(ticker)
   end
   local toggled = dark_addon.settings.fetch_toggle('master_toggle', false)
   if not toggled then
-    -- --dark_addon.interface.status('Готов...')
     return
   end
 
@@ -140,14 +139,11 @@ function dark_addon.rotation.tick(ticker)
 
   if dark_addon.rotation.active_rotation then
     if IsMounted() then return end
-
     local _, _, lagHome, lagWorld = GetNetStats()
-    --local lag = (((lagHome + lagWorld) / 2) / 1000) * 2
-	--(1.5/((100+haste)/100))+lag
 	local ownHaste = GetHaste()
 	local elkek = (1.5/((100+ownHaste)/100))+lagWorld
     if elkek ~= lastLag then
-      dark_addon.console.debug(2, 'engine', 'engine', string.format('Lag: %sms', elkek * 1000).." or "..elkek)
+      dark_addon.console.debug(2, 'engine', 'engine', string.format('Lag: %sms', elkek * 1000).." or "..elkek) --lol pls be silent on this shit :D
       lastLag = elkek
       dark_addon.rotation.timer.lag = elkek
     end
