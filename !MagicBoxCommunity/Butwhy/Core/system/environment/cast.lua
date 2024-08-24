@@ -3,9 +3,19 @@ local addon, dark_addon = ...
 local lastcasted_target = nil
 
 function _CastSpellByName(spell, target)
-  local target = target or "target"
-      secured = false
-      while not secured do
+	local target = target or "target"
+	
+	if type(spell) == 'table' then
+	_spelltable = spell
+	local _, name = _spelltable
+		spell = name
+	else
+		spell = spell
+	end
+	
+	
+	secured = false
+	while not secured do
         RunScript(
           [[
         for index = 1, 500 do
@@ -21,12 +31,22 @@ function _CastSpellByName(spell, target)
         if secured then
 		  lastcasted_target = target
           dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
+          -- --dark_addon.interface.status(spell)
         end
       end
 end
 
 function _CastGroundSpellByName(spell, target)
   local target = target or "target"
+	
+	if type(spell) == 'table' then
+	_spelltable = spell
+	local _, name = _spelltable
+		spell = name
+	else
+		spell = spell
+	end
+	
       secured = false
       while not secured do
         RunScript(
@@ -43,29 +63,38 @@ function _CastGroundSpellByName(spell, target)
         )
         if secured then
           dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
+          -- --dark_addon.interface.status(spell)
         end
       end
 end
 local lastprint = 0
+
 function _CastSpellByID(spell, target)
+local target = target or "target"
 local debug_level = dark_addon.settings.fetch('debug_level', nil)	
 	if debug_level >= 5 and lastprint ~= spell then
 		print(FlexIcon(spell,20,20))
 		lastprint = spell
 	end
-  if tonumber(spell) then
-    spell, _ = C_Spell.GetSpellInfo(spell)
-	spell = spell.name
-  end
-  return _CastSpellByName(spell, target)
+      secured = false
+      while not secured do
+        RunScript(
+          [[
+          for index = 1, 500 do
+            if not issecure() then
+              return
+            end
+          end
+			CastSpellByID("]] ..
+            spell .. [[", "]] .. target .. [[")
+          secured = true
+        ]]
+        )
+      end
 end
 
 function _CastGroundSpellByID(spell, target)
-  if tonumber(spell) then
-    spell, _ = C_Spell.GetSpellInfo(spell)
-	spell = spell.name
-  end
-  return _CastGroundSpellByName(spell, target)
+  return _CastSpellByID(spell, target)
 end
 
 function _SpellStopCasting()
@@ -86,7 +115,10 @@ function _SpellStopCasting()
 end
 
 local function auto_attack()
-  if not C_Spell.IsCurrentSpell(6603) then
+  if not IsCurrentSpell(6603) then
+    if dark_addon.adv_protected then
+      CastSpellByID(6603)
+    else
       secured = false
       while not secured do
         RunScript(
@@ -101,11 +133,15 @@ local function auto_attack()
         ]]
         )
       end
+    end
   end
 end
 
 local function auto_shot()
   if not IsCurrentSpell(75) then
+    if dark_addon.adv_protected then
+      CastSpellByID(75)
+    else
       secured = false
       while not secured do
         RunScript(
@@ -120,6 +156,7 @@ local function auto_shot()
         ]]
         )
       end
+    end
   end
 end
 
@@ -140,6 +177,7 @@ function RunMacroText(text)
         )
         if secured then
           dark_addon.console.debug(2, "macro", "red", text)
+          -- --dark_addon.interface.status("Macro")
         end
       end
 end
@@ -189,6 +227,7 @@ function dark_addon.environment.hooks.cast(spell, target)
     end
   end
 end
+
 
 function dark_addon.environment.hooks.sequenceactive(sequence)
   if sequence.active then
