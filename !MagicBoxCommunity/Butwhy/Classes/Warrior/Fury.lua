@@ -9,13 +9,11 @@ Fury.stuff = function()
 end
 
 local function combat()
+	
 end
 
 local function resting()
-if castable(6673) and player.buff(6673).down then
-	cast(6673)
-	return true
-end
+
 end
 
 
