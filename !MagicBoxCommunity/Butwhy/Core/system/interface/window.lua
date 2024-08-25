@@ -509,7 +509,7 @@ local function buildElements(table, parent)
             else
                 tmp:SetJustifyH('LEFT')
             end
-      tmp:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 14)
+      tmp:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 14)
       tmp:SetWidth(parent.content:GetWidth()-10)
 
       if element.align then
@@ -530,7 +530,7 @@ local function buildElements(table, parent)
       tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
       tmp:SetText(element.text)
       tmp:SetJustifyH('LEFT')
-      tmp:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", element.size or 12)
+      tmp:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", element.size or 12)
       tmp:SetWidth(parent.content:GetWidth()-10)
 
       if not element.offset then
@@ -592,7 +592,7 @@ local function buildElements(table, parent)
 		tmp_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
         tmp_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_f:SetText(element.text)
-        tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_f:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
       tmp.checkBoxStyle = checkBoxStyle
       tmp:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key, element.default or false))
       if element.desc then
@@ -603,7 +603,7 @@ local function buildElements(table, parent)
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-15)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-15)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -654,7 +654,7 @@ local function buildElements(table, parent)
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-4)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 12)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 
@@ -666,7 +666,7 @@ local function buildElements(table, parent)
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -725,7 +725,7 @@ local function buildElements(table, parent)
 		tmp_check_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
         tmp_check_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_check_f:SetText(element.text)
-        tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
       tmp_check:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '.check', element.default_check or false))
 
 
@@ -737,7 +737,7 @@ local function buildElements(table, parent)
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
                 tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -777,7 +777,7 @@ local function buildElements(table, parent)
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 12)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 
@@ -789,7 +789,7 @@ local function buildElements(table, parent)
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-15)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-15)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 12)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -828,7 +828,7 @@ local function buildElements(table, parent)
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-element.height-3)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-element.height-3)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 9)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('LEFT')
         push = tmp_desc:GetStringHeight() + 5
@@ -867,7 +867,7 @@ local function buildElements(table, parent)
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 10)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 10)
       tmp_text:SetJustifyH('LEFT')
 
       if element.desc then
@@ -878,7 +878,7 @@ local function buildElements(table, parent)
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 9)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('LEFT')
         push = tmp_desc:GetStringHeight() + 5
@@ -1261,7 +1261,7 @@ dark_addon.on_ready(function()
       { type = 'header', text = L_Pst },
       { type = 'rule' },
       { key = 'tickrate', type = 'spinner', text = L_TickRate, desc = L_TickRateDesc, min = 0.01, max = 1.00, step = 0.05, default = 0.2 },
-      { key = 'gcd', type = 'checkbox', text = L_GCDC, desc = L_GCDCDesc, default = false },
+      { key = 'gcd', type = 'checkbox', text = L_GCDC, desc = L_GCDCDesc, default = true },
       { type = 'spacer' },
       { type = 'spacer' },
       { type = 'header', text = L_Turbo },
@@ -1322,8 +1322,8 @@ local function SpecIcon()
   return select(4,GetSpecializationInfo(currentSpec))
 end
 function Splash(txt, icon, time)
-  icon = icon or SpecIcon()
-  time = time or 5
+ local  icon = icon or SpecIcon()
+  local time = time or 5
 	SilentSplasher:SetAlpha(1)
 	SilentSplasher:Show()
 	PlaySound(124, "SFX");
