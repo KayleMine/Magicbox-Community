@@ -195,6 +195,7 @@ end
 local turbo = false
 
 function dark_addon.environment.hooks.cast(spell, target)
+
   turbo = dark_addon.settings.fetch("_engine_turbo", false)
   if not dark_addon.protected then
     return
@@ -211,7 +212,9 @@ function dark_addon.environment.hooks.cast(spell, target)
       end
     else
       if tonumber(spell) then
-        _CastSpellByID(spell, target)
+		local name = C_Spell.GetSpellName(spell)
+		if not name then error('Spell not exist or nil!') end
+        _CastSpellByName(name, target)
       else
         _CastSpellByName(spell, target)
       end
