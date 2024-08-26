@@ -40,6 +40,10 @@ end
 
 dark_addon.environment.hooks.modifier = setmetatable({}, {
   __index = function(t, k)
-    return modifiers[k](t)
+    if modifiers[k] then
+      return modifiers[k](t)
+    else
+      return nil
+    end
   end
 })
