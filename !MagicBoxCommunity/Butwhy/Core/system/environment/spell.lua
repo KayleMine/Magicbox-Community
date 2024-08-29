@@ -112,7 +112,7 @@ end
 
 function spell:castable()
   local usable, noMana = C_Spell.IsSpellUsable(self.spell.spellID)
-  if usable and dark_addon.support.iknow(self.spell.spellID) then
+  if usable then
     if self.cooldown == 0 then
       return true
     else
