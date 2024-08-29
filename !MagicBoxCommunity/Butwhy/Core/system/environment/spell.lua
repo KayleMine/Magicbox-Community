@@ -6,8 +6,7 @@ local spell = { }
 function spell:cooldown()
 	_table = C_Spell.GetSpellCooldown(self.spell.spellID)
 	if not _table then return 0 end
-	time, value = _table.startTime,  _table.duration
-	
+	local time, value = _table.startTime,  _table.duration, _table.isEnabled
   if not time or time == 0 then
     return 0
   end
@@ -17,6 +16,12 @@ function spell:cooldown()
   else
     return 0
   end
+end
+
+
+function spell:icon() 
+  local textureA, textureB = C_Spell.GetSpellTexture(self.spell.spellID)
+  return textureA ~= textureB
 end
 
 
@@ -112,6 +117,7 @@ end
 
 function spell:castable()
   local usable, noMana = C_Spell.IsSpellUsable(self.spell.spellID)
+  print(self.cooldown)
   if usable then
     if self.cooldown == 0 then
       return true
@@ -158,4 +164,3 @@ function dark_addon.environment.conditions.spell(unit)
     end
   })
 end
-
