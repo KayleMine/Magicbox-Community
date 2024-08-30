@@ -81,6 +81,14 @@ local loading_wait = false
 local function init()
   if not loading_wait then
      C_Timer.After(3.3, function()
+
+		if GetCVar("nameplateShowEnemies") == '0' then
+			SetCVar("nameplateShowEnemies", 1)
+		end
+		if GetCVar("nameplateShowAll") == '0' then
+			SetCVar("nameplateShowAll", 1)
+		end
+
       dark_addon.rotation.current_spec = GetSpecializationInfo(GetSpecialization())
 	  if dark_addon.rotation.current_spec then
 		  local active_rotation = dark_addon.settings.fetch('active_rotation_' .. dark_addon.rotation.current_spec, false)
