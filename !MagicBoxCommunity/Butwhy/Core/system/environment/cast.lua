@@ -106,7 +106,7 @@ function _SpellStopCasting()
 end
 
 local function auto_attack()
-  if not IsCurrentSpell(6603) then
+  if not C_Spell.IsCurrentSpell(6603) then
     if dark_addon.adv_protected then
       CastSpellByID(6603)
     else
@@ -129,7 +129,7 @@ local function auto_attack()
 end
 
 local function auto_shot()
-  if not IsCurrentSpell(75) then
+  if not C_Spell.IsCurrentSpell(75) then
     if dark_addon.adv_protected then
       CastSpellByID(75)
     else
@@ -195,7 +195,6 @@ end
 local turbo = false
 
 function dark_addon.environment.hooks.cast(spell, target)
-
   turbo = dark_addon.settings.fetch("_engine_turbo", false)
   if not dark_addon.protected then
     return
@@ -206,15 +205,15 @@ function dark_addon.environment.hooks.cast(spell, target)
   if turbo or not UnitCastingInfo("player") then
     if target == "ground" then
       if tonumber(spell) then
-        _CastGroundSpellByID(spell, target)
+		local why = C_Spell.GetSpellName(spell)
+        _CastGroundSpellByName(why, target)
       else
         _CastGroundSpellByName(spell, target)
       end
     else
       if tonumber(spell) then
-		local name = C_Spell.GetSpellName(spell)
-		if not name then error('Spell not exist or nil!') end
-        _CastSpellByName(name, target)
+		local why = C_Spell.GetSpellName(spell)
+        _CastSpellByName(why, target)
       else
         _CastSpellByName(spell, target)
       end
