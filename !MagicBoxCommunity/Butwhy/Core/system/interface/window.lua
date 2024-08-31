@@ -727,10 +727,11 @@ local function buildElements(table, parent)
         dark_addon.settings.store(table.key .. '_' .. element.key .. '.check', checked)
       end)
         tmp_check_f = tmp_check.fontString
-		tmp_check_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
+		tmp_check_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 25, offset)
         tmp_check_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_check_f:SetText(element.text)
         tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
+		tmp_check_f:SetJustifyH('LEFT')
       tmp_check:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '.check', element.default_check or false))
 
 
@@ -744,7 +745,7 @@ local function buildElements(table, parent)
         tmp_desc:SetText(element.desc)
         tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 11)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
-                tmp_desc:SetJustifyH('CENTER')
+		tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
       end
 
@@ -983,7 +984,7 @@ local function buildElements(table, parent)
     if element.type == 'rule' then
       offset = offset + -10
     elseif element.type == 'spinner' or element.type == 'checkspin' then
-      offset = offset + -19
+      offset = offset + -20
     elseif element.type == 'combo' or element.type == 'dropdown' or 'multi_dropdown' then
       offset = offset + -20
     elseif element.type == 'texture' then
