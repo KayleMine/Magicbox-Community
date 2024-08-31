@@ -522,28 +522,33 @@ local function buildElements(table, parent)
 
     elseif element.type == 'text' then
 
-      local tmp = DiesalGUI:Create("FontString")
-      tmp:SetParent(parent.content)
-      parent:AddChild(tmp)
-      tmp = tmp.fontString
-      tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
-      tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset)
-      tmp:SetText(element.text)
-      tmp:SetJustifyH('LEFT')
-      tmp:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", element.size or 12)
-      tmp:SetWidth(parent.content:GetWidth()-10)
+		local tmp = DiesalGUI:Create("FontString")
+		tmp:SetParent(parent.content)
+		parent:AddChild(tmp)
+		tmp = tmp.fontString
 
-      if not element.offset then
-        element.offset = tmp:GetStringHeight()
-      end
+		-- Adjust position based on x, y parameters
+		local x_offset = element.x or 5  -- Default x offset
+		local y_offset = element.y or offset  -- Default y offset
 
-      if element.align then
-        tmp:SetJustifyH(strupper(element.align))
-      end
+		tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", x_offset, y_offset)
+		tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, y_offset)
+		tmp:SetText(element.text)
+		tmp:SetJustifyH('LEFT')
+		tmp:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", element.size or 12)
+		tmp:SetWidth(parent.content:GetWidth() - 10)
 
-      if element.key then
-        table.window.elements[element.key] = tmp
-      end
+		if not element.offset then
+			element.offset = tmp:GetStringHeight()
+		end
+
+		if element.align then
+			tmp:SetJustifyH(strupper(element.align))
+		end
+
+		if element.key then
+			table.window.elements[element.key] = tmp
+		end
 
 
     elseif element.type == 'rule' then
@@ -748,10 +753,91 @@ local function buildElements(table, parent)
         table.window.elements[element.key..'Check'] = tmp_check
         table.window.elements[element.key..'Spin'] = tmp_spin
       end
+	  
+	  
+
+	elseif element.type == 'multi_dropdown' then
+    local dropdowns = {}
+    local total_width = 0
+
+    -- Create the text label for the multi-dropdowns
+    local tmp_text = DiesalGUI:Create("FontString")
+    tmp_text:SetParent(parent.content)
+    parent:AddChild(tmp_text)
+    tmp_text = tmp_text.fontString
+    tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
+    tmp_text:SetText(element.text)
+    tmp_text:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 12)
+    tmp_text:SetJustifyH('LEFT')
+    tmp_text:SetWidth(parent.content:GetWidth() - 10)
+
+    -- Start creating dropdowns
+	for i = (element.amount or 2), 1, -1 do  -- Adjust the loop to go from right to left
+        -- Calculate x offset for each dropdown based on total_width
+        local x_offset = -total_width - (element.wide or 90) + 83 -- Adjust the offset for each dropdown to align right
+        local y_offset = element.y or offset
+
+        -- Create the dropdown
+        local tmp_list = DiesalGUI:Create('Dropdown')
+        if element.wide then
+            tmp_list:SetWidth(element.wide)
+        else
+            tmp_list:SetWidth(180)
+        end
+
+        parent:AddChild(tmp_list)
+        tmp_list:SetParent(parent.content)
+        tmp_list:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", x_offset, y_offset - 5) -- Anchor to the right
+
+		local orderedKeys = {}
+		local list = {}
+		for j, value in pairs(element.lists[i]) do
+			orderedKeys[j] = value.key
+			list[value.key] = value.text
+		end
+		tmp_list:SetList(list, orderedKeys)
+
+		-- Fetch the default value for the current dropdown
+		local default_value = element.default
+		if type(default_value) == 'table' then
+			default_value = default_value[i] or 'Empty'
+		end
+
+		tmp_list:SetEventListener('OnValueChanged', function(this, event, value)
+			dark_addon.settings.store(table.key .. '_' .. element.key .. i, value)
+		end)
+
+		tmp_list:SetValue(dark_addon.settings.fetch(table.key .. '_' .. element.key .. i, default_value))
+
+		dropdowns[i] = tmp_list
+		total_width = total_width + tmp_list:GetWidth() + (element.spacing or 10) -- Update spacing based on dropdown width
+	end
+
+    -- Optional description text
+    if element.desc then
+        local tmp_desc = DiesalGUI:Create("FontString")
+        tmp_desc:SetParent(parent.content)
+        parent:AddChild(tmp_desc)
+        tmp_desc = tmp_desc.fontString
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset - 30) -- Adjust the position as needed
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset - 30)
+        tmp_desc:SetText(element.desc)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\core\\media\\Consolas.ttf", 12)
+        tmp_desc:SetWidth(parent.content:GetWidth() - 10)
+        tmp_desc:SetJustifyH('CENTER')
+        push = tmp_desc:GetStringHeight() + 5
+    end
+
+    -- Store dropdowns in the elements table
+    if element.key then
+        for i = 1, (element.amount or 2) do
+            table.window.elements[element.key .. i] = dropdowns[i]
+        end
+    end 
 
     elseif element.type == 'combo' or element.type == 'dropdown' then
 
-      local tmp_list = DiesalGUI:Create('Dropdown')
+ local tmp_list = DiesalGUI:Create('Dropdown')
       if element.width then tmp_list.settings.width = element.width end
       parent:AddChild(tmp_list)
       tmp_list:SetParent(parent.content)
@@ -799,6 +885,7 @@ local function buildElements(table, parent)
         table.window.elements[element.key..'Text'] = tmp_text
         table.window.elements[element.key] = tmp_list
       end
+    
 
     elseif element.type == 'button' then
 
@@ -897,12 +984,12 @@ local function buildElements(table, parent)
       offset = offset + -10
     elseif element.type == 'spinner' or element.type == 'checkspin' then
       offset = offset + -19
-    elseif element.type == 'combo' or element.type == 'dropdown' then
+    elseif element.type == 'combo' or element.type == 'dropdown' or 'multi_dropdown' then
       offset = offset + -20
     elseif element.type == 'texture' then
       offset = offset + -(element.offset or 0)
     elseif element.type == "text" then
-      offset = offset + -(element.offset) - (element.size or 10)
+      offset = offset + -(element.offset) 
     elseif element.type == 'button' then
       offset = offset + -20
     elseif element.type == 'spacer' then
