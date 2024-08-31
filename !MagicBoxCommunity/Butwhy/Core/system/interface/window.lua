@@ -804,7 +804,7 @@ local function buildElements(table, parent)
 		end
 
 		tmp_list:SetEventListener('OnValueChanged', function(this, event, value)
-			dark_addon.settings.store(table.key .. '_' .. element.key .. i, value)
+			dark_addon.settings.store(table.key .. '_' .. element.key .. '_' .. i, value)
 		end)
 
 		tmp_list:SetValue(dark_addon.settings.fetch(table.key .. '_' .. element.key .. i, default_value))
