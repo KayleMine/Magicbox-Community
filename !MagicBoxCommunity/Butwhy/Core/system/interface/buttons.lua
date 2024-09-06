@@ -12,16 +12,16 @@ local first_button
 local last_button
 
 fontObject = CreateFont("dark_addon_regular")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_small")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", 12,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", 12,"OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_bold")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_icon")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
 
 container_frame.moving = false
 container_frame:SetPoint('CENTER', UIParent)
@@ -263,6 +263,7 @@ function dark_addon.interface.buttons.add_toggle(button)
       self.frame.text:SetText(button.on.label)
       self:set_color_on(1)
       if button.label then
+        --dark_addon.interface.status_override(button.label .. ' work? again?', 1)
       end
     end,
     set_color_off = function(self, ratio)
@@ -282,6 +283,7 @@ function dark_addon.interface.buttons.add_toggle(button)
       self.frame.text:SetText(button.off.label)
       self:set_color_off(1)
       if button.label then
+        --dark_addon.interface.status_override(button.label .. ' disable.', 1)
       end
     end,
     callback = function(self)
@@ -336,12 +338,14 @@ function dark_addon.interface.buttons.add_toggleNoColor(button)
     toggle_on = function(self)
       self.frame.text:SetText(button.on.label)
       if button.label then
+        --dark_addon.interface.status_override(button.label .. ' work? again?', 1)
       end
     end,
 
     toggle_off = function(self)
       self.frame.text:SetText(button.off.label)
       if button.label then
+        --dark_addon.interface.status_override(button.label .. ' disable.', 1)
       end
     end,
     callback = function(self)
@@ -403,13 +407,13 @@ function dark_addon.interface.buttons.resize()
   button_size = dark_addon.settings.fetch('button_size', 32)
 
   fontObject = CreateFont("dark_addon_regular")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_bold")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_icon")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
 
   for key, button in pairs(buttons)  do
     local offset = ( button.frame.index * button_size ) + ( button.frame.index * button_padding )
@@ -424,20 +428,6 @@ local R_c = GetItemIcon(124635);
 local T_c = GetItemIcon(144258);
 
 
-if (GetLocale() == "ruRU") then
-L_Move = 'Заблок. | Разблок. панель.'
-L_Hide = 'Спрятать панель.'
-L_Show = 'Показать панель.'
-L_Size = 'Размер кнопок на панели.'
-L_Enable = 'Вкл.: Профиль. \n [master_toggle]'
-L_CDS = 'Вкл.: Кд. \n [cooldowns]'
-L_Kick = 'Вкл.: Кик кастов. \n [interrupts]'
-
-L_TRNK = 'Тринькеты'
-L_RNGS = 'Кольца'
-L_AITMS = 'Авто-предметы'
-L_ITMS = 'Предметы!'
- else
 L_Move = 'Block | Unlock move panel'
 L_Hide = 'hide window'
 L_Show = 'show window'
@@ -450,20 +440,19 @@ L_TRNK = 'Trinkets'
 L_RNGS = 'Rings'
 L_AITMS = 'Auto-Items'
 L_ITMS = 'items!'
-L_ITMSB = 'items! \n [items]'
- end
- 
+L_ITMS = 'items! \n [items]'
+
 dark_addon.on_ready(function()
   button_size = dark_addon.settings.fetch('button_size', button_size)
 
   fontObject = CreateFont("dark_addon_regular")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_bold")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_icon")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
 
   dark_addon.commands.register({
     command = 'move',
@@ -615,7 +604,7 @@ item_menu = dark_addon.interface.builder.buildGUI(item_s)
 dark_addon.interface.buttons.add_toggle({
 core = true,
 name = 'items',
-label = L_ITMSB,
+label = L_ITMS,
 font = 'dark_addon_icon',
 on = {
 label = dark_addon.interface.icon('coffee'),
