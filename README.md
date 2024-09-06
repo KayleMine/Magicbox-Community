@@ -1,6 +1,7 @@
 # Magic Box: Community Rotation's
 
 > [!Important]
+> Get unlocker before use.
 > [Api documents](http://f1021975.xsph.ru/#/)
 
 > [!TIP]
