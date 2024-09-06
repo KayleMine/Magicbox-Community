@@ -808,7 +808,7 @@ local function buildElements(table, parent)
 			dark_addon.settings.store(table.key .. '_' .. element.key .. '_' .. i, value)
 		end)
 
-		tmp_list:SetValue(dark_addon.settings.fetch(table.key .. '_' .. element.key .. i, default_value))
+		tmp_list:SetValue(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '_' .. i, default_value))
 
 		dropdowns[i] = tmp_list
 		total_width = total_width + tmp_list:GetWidth() + (element.spacing or 10) -- Update spacing based on dropdown width
