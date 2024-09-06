@@ -12,16 +12,16 @@ local first_button
 local last_button
 
 fontObject = CreateFont("dark_addon_regular")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_small")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", 12,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", 12,"OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_bold")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_icon")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
 
 container_frame.moving = false
 container_frame:SetPoint('CENTER', UIParent)
@@ -407,13 +407,13 @@ function dark_addon.interface.buttons.resize()
   button_size = dark_addon.settings.fetch('button_size', 32)
 
   fontObject = CreateFont("dark_addon_regular")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_bold")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_icon")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
 
   for key, button in pairs(buttons)  do
     local offset = ( button.frame.index * button_size ) + ( button.frame.index * button_padding )
@@ -446,13 +446,13 @@ dark_addon.on_ready(function()
   button_size = dark_addon.settings.fetch('button_size', button_size)
 
   fontObject = CreateFont("dark_addon_regular")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_bold")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
 
   fontObject = CreateFont("dark_addon_icon")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCustom\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
 
   dark_addon.commands.register({
     command = 'move',
