@@ -27,7 +27,7 @@ function power:combopoints()
 end
 
 function power:runes()
- return dark_addon.environment.conditions.runes(self.unit, 'runes')
+ return dark_addon.environment.conditions.powerType(self.unit, Enum.PowerType.Runes, 'runes')
 end
 
 function power:runicpower()
