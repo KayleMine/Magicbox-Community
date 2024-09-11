@@ -2,13 +2,37 @@ local addon, dark_addon = ...
 
 local powerType = { }
 
+local function runes_actual()
+  local runes_ready = 0.0
+  for i = 1, 6 do
+    local start, duration, runeReady = GetRuneCooldown(i)
+    local percent = start == 0 and 1.0 or (1 - (((start + duration) - GetTime()) / duration) * 1)
+    runes_ready = runes_ready + percent
+  end
+  return math.floor(runes_ready)
+end
+
 function powerType:actual()
-  local actual = UnitPower(self.unitID, self.type)
+local actual;
+
+if self.type ~= 5 then
+  actual = UnitPower(self.unitID, self.type)
+end
+if self.type == 5 then
+  actual = runes_actual()
+end
+
   return actual or 0
 end
 
 function powerType:max()
-  local max = UnitPowerMax(self.unitID, self.type)
+	local max = 0;
+	if self.type ~= 5 then
+	  max = UnitPowerMax(self.unitID, self.type)
+	end
+	if self.type == 5 then
+	  max = 6
+	end
   return max or 0
 end
 
