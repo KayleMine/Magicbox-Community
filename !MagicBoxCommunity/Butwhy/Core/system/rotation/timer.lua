@@ -83,9 +83,9 @@ end
       end
    end
 
-   if GetItemCooldown(hands) == 0 and not player.channeling() then
-      macro('/use 7')
-   end
+  -- if GetItemCooldown(hands) == 0 and not player.channeling() then
+  --   macro('/use 7')
+  -- end
 end
 end
 setfenv(items, dark_addon.environment.env)
