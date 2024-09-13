@@ -189,6 +189,7 @@ dummies = {
 	[194644] = "Dungeoneer's Training Dummy", -- Valdrakken (Tanking)
 	[189632] = "Animated Duelist", 			  -- Valdrakken (Raider's Training Dummy)
 	[189617] = "Boulderfist", 			      -- Valdrakken (Raider's Tanking Dummy)
+	[225985] = "XXX", 			      -- XXX (Raider's Tanking Dummy)
 }  
 
 function dummy(unitID)
@@ -233,7 +234,7 @@ function unit:IsBoss()
         return true
     end
     local inRaid = IsInRaid()
-    if UnitLevel(self.unitID) == -1 or (not inRaid and UnitLevel(self.unitID) > 72) then
+    if UnitLevel(self.unitID) == -1 or (not inRaid and UnitLevel(self.unitID) > 82) then
         return true
     end
     if UnitIsPlayer(self.unitID) and UnitCanAttack("player", self.unitID) then
@@ -496,7 +497,7 @@ function unit:time_to_die()
 end
 
 local function spell_cooldown(spell)
-  _table = C_Spell.GetSpellCooldown(gcd_spell)
+  _table = C_Spell.GetSpellCooldown(spell)
   if not _table then return 0 end
   local time, value = _table.startTime,  _table.duration
 
@@ -512,8 +513,8 @@ local function spell_cooldown(spell)
 end
 
 local function spell_castable(spell)
-  spell = GetSpellInfo(spell)
-  local usable, noMana = IsUsableSpell(spell)
+  local spell = C_Spell.GetSpellInfo(spell).name
+  local usable, noMana = C_Spell.IsSpellUsable(spell)
   local inRange = C_Spell.IsSpellInRange(spell, calledUnit.unitID)
   if usable and inRange == 1 then
     if spell_cooldown(spell) == 0 then
