@@ -81,7 +81,7 @@ local function Constructor(name)
 	text:SetPoint("TOPLEFT", 4, -1) -- sits below center when rendered off by 1 pixel, fuck you blizzard
 	text:SetPoint("BOTTOMRIGHT", -4, 0)
 	text:SetJustifyV("MIDDLE")
-  text:SetJustifyH("MIDDLE")
+  text:SetJustifyH("CENTER")
 	frame:SetFontString(text)
 	frame:SetScript("OnClick", function(this,button,...)
 		DiesalGUI:OnMouse(this,button)
