@@ -148,7 +148,7 @@ function dark_addon.rotation.tick(ticker)
       dark_addon.rotation.timer.lag = elkek
     end
 
-    if not turbo and (gcd_wait and gcd_wait > (elkek + castclip)) then
+    if not turbo and (gcd_wait and gcd_wait > (elkek/1000 + castclip)) then
       if dark_addon.rotation.active_rotation.gcd then
         return dark_addon.rotation.active_rotation.gcd()
       else
