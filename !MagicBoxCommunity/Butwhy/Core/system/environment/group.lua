@@ -13,8 +13,8 @@ local function group_count(func)
   return count
 end
 
-function group:count(func)
-  return group_count
+function group.count(func)
+  return group_count(func)
 end
 
 local function group_match(func)
@@ -26,8 +26,8 @@ local function group_match(func)
   return false
 end
 
-function group:match(func)
-  return group_match
+function group.match(func)
+  return group_match(func)
 end
 
 local function group_buffable(spell)
@@ -36,8 +36,8 @@ local function group_buffable(spell)
   end)
 end
 
-function group:buffable(spell)
-  return group_buffable
+function group.buffable(spell)
+  return group_buffable(spell)
 end
 
 
@@ -47,8 +47,8 @@ local function group_buffexist(spell)
   end)
 end
 
-function group:exists(spell)
-  return group_buffexist
+function group.exists(spell)
+  return group_buffexist(spell)
 end
 
 local function check_removable(removable_type)
@@ -209,28 +209,33 @@ local function group_dispellable(spell)
   end)
 end
 
-function group:dispellable(spell)
-  return group_dispellable
+function group.dispellable(spell)
+  return group_dispellable(spell)
 end
 
 local function group_under(percent, distance, effective)
   local count = 0
   for unit in dark_addon.environment.iterator() do
-    if unit and unit.alive and ((distance and unit.distance <= distance) or not distance) and ((effective and unit.health.effective <= percent) or (not effective and unit.health.percent <= percent)) then 
-      count = count + 1
+    if unit then
+		if unit.alive and 
+		  ((distance and unit.unitID ~= 'player' and unit.distance <= distance) or not distance or unit.unitID == 'player') and 
+		  ((effective and unit.health.effective < percent) or (not effective and unit.health.percent < percent)) then 
+		  count = count + 1
+		end
     end
   end
   return count
 end
 
-function group:under(...)
-  return group_under
+function group.under(percent, distance, effective)
+  return group_under(percent, distance, effective)
 end
 
 function dark_addon.environment.conditions.group()
-  return setmetatable({ }, {
-    __index = function(t, k)
-      return group[k](t)
+  return setmetatable({}, {
+    __index = function(_, k)
+      return group[k]
     end
   })
 end
+
