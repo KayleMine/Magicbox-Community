@@ -213,19 +213,14 @@ function group:dispellable(spell)
   return group_dispellable
 end
 
-function group_under(...)
-  local percent, distance, effective = ...
-  return group_count(function (unit)
-    return unit.alive
-      and (
-        (distance and unit.distance <= distance)
-        or not distance
-      )
-      and (
-        (effective and unit.health.effective < percent) 
-        or (not effective and unit.health.percent < percent)
-      )
-  end)
+local function group_under(percent, distance, effective)
+  local count = 0
+  for unit in dark_addon.environment.iterator() do
+    if unit and unit.alive and ((distance and unit.distance <= distance) or not distance) and ((effective and unit.health.effective <= percent) or (not effective and unit.health.percent <= percent)) then 
+      count = count + 1
+    end
+  end
+  return count
 end
 
 function group:under(...)
