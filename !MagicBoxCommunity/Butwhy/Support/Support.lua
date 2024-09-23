@@ -191,6 +191,25 @@ support.buffed_table = function(spell)
   return group:buffed_units(spell)
 end
 
+local function collect_debuffed_units(spell)
+  local units = {}
+  for unit in dark_addon.environment.iterator() do
+    if unit and unit.alive and unit.debuff(spell).up then 
+      table.insert(units, unit)
+    end
+  end
+  return units
+end
+
+function group:debuffed_units(spell)
+  return collect_debuffed_units(spell)
+end
+
+support.debuffed_table = function(spell)
+  return group:debuffed_units(spell)
+end
+
+
 support.CreateMacro = function(macroName, macroCommand)
     if GetMacroIndexByName(macroName) == 0 then
         CreateMacro(macroName, "INV_MISC_QUESTIONMARK", macroCommand, 1)
