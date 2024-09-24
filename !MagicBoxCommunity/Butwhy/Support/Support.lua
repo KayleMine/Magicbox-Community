@@ -110,8 +110,10 @@ support.castGroupBuff = function(buff, min)
 end
 
 support.iknow = function(spellID)
-isKnown = IsPlayerSpell(spellID, isPetSpell)
-	if isKnown == true then
+local isKnown = IsPlayerSpell(spellID, isPetSpell)
+local IsSpellKnown = IsSpellKnown(spellID, isPetSpell)
+local IsSpellKnownOrOverridesKnown = IsSpellKnownOrOverridesKnown(spellID, isPetSpell)
+	if isKnown or IsSpellKnown or IsSpellKnownOrOverridesKnown then
 		return true 
 			else 
 		return false 
