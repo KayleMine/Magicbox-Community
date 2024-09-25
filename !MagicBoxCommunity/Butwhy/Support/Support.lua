@@ -109,16 +109,26 @@ support.castGroupBuff = function(buff, min)
   return false
 end
 
+
 support.iknow = function(spellID)
-local isKnown = IsPlayerSpell(spellID, isPetSpell)
-local IsSpellKnown = IsSpellKnown(spellID, isPetSpell)
-local IsSpellKnownOrOverridesKnown = IsSpellKnownOrOverridesKnown(spellID, isPetSpell)
-	if isKnown or IsSpellKnown or IsSpellKnownOrOverridesKnown then
-		return true 
-			else 
-		return false 
-	end
+    local isKnown = IsPlayerSpell(spellID, isPetSpell)
+    local IsSpellKnown = IsSpellKnown(spellID, isPetSpell)
+    local talent = dark_addon.rotation.allTalents[spellID]
+    local isTalentActive = talent and talent.active or false
+
+    if isKnown or IsSpellKnown or isTalentActive then
+        return true 
+    else 
+        return false 
+    end
 end
+
+support.talentRank = function(talentID)
+    local talent = dark_addon.rotation.allTalents[talentID]
+    local rank = talent and talent.rank or 0
+    return rank
+end
+
 
 support.name = function(spell)
 spell = select(1, C_Spell.GetSpellInfo(spell).name)
@@ -156,55 +166,50 @@ end
 
 local group = dark_addon.environment.conditions.group()
 
-local function collect_buffable_units(spell)
+-- Generalized function to collect units based on a condition
+local function collect_units(spell, condition)
   local units = {}
   for unit in dark_addon.environment.iterator() do
-    if unit and unit.alive and unit.buff(spell).down then 
+    if unit and unit.alive and condition(unit, spell) then
       table.insert(units, unit)
     end
   end
   return units
 end
 
-local function collect_buffed_units(spell)
-  local units = {}
-  for unit in dark_addon.environment.iterator() do
-    if unit and unit.alive and unit.buff(spell).up then 
-      table.insert(units, unit)
-    end
-  end
-  return units
+-- Conditions for buff/debuff checks
+local function is_buffable(unit, spell)
+  return unit.buff(spell).down
+end
+
+local function is_buffed(unit, spell)
+  return unit.buff(spell).up
+end
+
+local function is_debuffed(unit, spell)
+  return unit.debuff(spell).up
+end
+
+-- Group functions using the generalized unit collection
+function group:buffable_units(spell)
+  return collect_units(spell, is_buffable)
 end
 
 function group:buffed_units(spell)
-  return collect_buffed_units(spell)
+  return collect_units(spell, is_buffed)
 end
 
-
-function group:buffable_units(spell)
-  return collect_buffable_units(spell)
+function group:debuffed_units(spell)
+  return collect_units(spell, is_debuffed)
 end
 
+-- Support table functions
 support.buffable_table = function(spell)
-	return group:buffable_units(spell)
+  return group:buffable_units(spell)
 end
 
 support.buffed_table = function(spell)
   return group:buffed_units(spell)
-end
-
-local function collect_debuffed_units(spell)
-  local units = {}
-  for unit in dark_addon.environment.iterator() do
-    if unit and unit.alive and unit.debuff(spell).up then 
-      table.insert(units, unit)
-    end
-  end
-  return units
-end
-
-function group:debuffed_units(spell)
-  return collect_debuffed_units(spell)
 end
 
 support.debuffed_table = function(spell)
