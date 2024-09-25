@@ -20,6 +20,7 @@ dark_addon.rotation = {
   spellbooks = { },
   talentbooks = { },
   dispellbooks = { },
+  allTalents = { },
   active_rotation = false
 }
 
@@ -77,11 +78,90 @@ function dark_addon.rotation.load(name)
 
 end
 local loading_wait = false
+ 
+    -- Get Active Talents
+    local function getActiveTalents(node, configId)
+        local activeTalents = {}
+        for _, entryID in pairs(node.entryIDsWithCommittedRanks) do
+            local entryInfo = _G.C_Traits.GetEntryInfo(configId, entryID)
+            if entryInfo and entryInfo.definitionID then
+                local definitionInfo = _G.C_Traits.GetDefinitionInfo(entryInfo.definitionID)
+                if definitionInfo.spellID ~= nil then
+                    activeTalents[definitionInfo.spellID] = activeTalents[definitionInfo.spellID] or {}
+                    activeTalents[definitionInfo.spellID].active = true
+                    activeTalents[definitionInfo.spellID].rank = node.activeRank or 0
+                end
+            end
+        end
+        return activeTalents
+    end
+
+
+    -- Get All Talents
+local function getAllTalents()
+    local talents = {}
+    local configId = _G.C_ClassTalents.GetActiveConfigID()
+    if not configId then 
+        print("No configId found, talents maybe broken, swap one talent to update!")
+        return talents 
+    end
+    local configInfo = _G.C_Traits.GetConfigInfo(configId)
+    if not configInfo then 
+        print("No configInfo found, talents maybe broken, swap one talent to update!")
+        return talents 
+    end
+    
+    for _, treeId in pairs(configInfo.treeIDs) do
+        local nodes = _G.C_Traits.GetTreeNodes(treeId)
+        for _, nodeId in pairs(nodes) do
+            local node = _G.C_Traits.GetNodeInfo(configId, nodeId)
+            local activeTalents = getActiveTalents(node, configId)
+            for _, entryID in pairs(node.entryIDs) do
+                local entryInfo = _G.C_Traits.GetEntryInfo(configId, entryID)
+                if entryInfo and entryInfo.definitionID then
+                    local definitionInfo = _G.C_Traits.GetDefinitionInfo(entryInfo.definitionID)
+                    local talentID = definitionInfo.spellID
+					if talentID ~= nil then
+						talents[talentID] = talents[talentID] or {}
+						-- Ensure 'active' status is properly assigned
+						talents[talentID].active = activeTalents[talentID] and true or false
+						talents[talentID].rank = node.activeRank or 0
+						
+						if talents[talentID].active and IsPlayerSpell(talentID) then
+					
+						-- Store talent using talentID as the key, not as part of an array
+						dark_addon.rotation.allTalents[talentID] = { 
+							id = talentID, 
+							active = talents[talentID].active, 
+							rank = talents[talentID].rank 
+						}
+						end
+					end
+                end
+            end
+        end
+    end
+    return talents
+end
+
+
+local function init_talents()
+dark_addon.rotation.allTalents = {};
+--print('Cleaned talents')
+getAllTalents();
+C_Timer.After(1, function() 
+    local count = 0
+    for _ in pairs(dark_addon.rotation.allTalents) do
+        count = count + 1
+    end
+    --print('Found talents: ', count)
+end)
+
+end
 
 local function init()
   if not loading_wait then
      C_Timer.After(3.3, function()
-
 		if GetCVar("nameplateShowEnemies") == '0' then
 			SetCVar("nameplateShowEnemies", 1)
 		end
@@ -97,11 +177,12 @@ local function init()
 		  else
 		  end
       end
+	  init_talents();
       loading_wait = false
     end)
   end
 end
-
+ 
 
 dark_addon.on_ready(function()
   init()
@@ -131,3 +212,27 @@ dark_addon.event.register("ACTIVE_TALENT_GROUP_CHANGED", function(...)
   loading_wait = true
 end)
 
+
+local _reset_talents = false
+ 
+dark_addon.Listener:Add('UNIT_SPELLCAST_LISTENER', 'UNIT_SPELLCAST_START', function(unit, guid, id)
+    if unit == 'player' and id == 384255 and not _reset_talents then
+        _reset_talents = true
+        C_Timer.After(6, function()
+            _reset_talents = false
+            init_talents()
+        end)
+    end
+end)
+
+dark_addon.Listener:Add('UNIT_SPELLCAST_INTERRUPTED_LISTENER', 'UNIT_SPELLCAST_INTERRUPTED', function(unit, guid, id)
+    if unit == 'player' and id == 384255 and _reset_talents then
+        _reset_talents = false
+    end
+end)
+
+dark_addon.Listener:Add('UNIT_SPELLCAST_STOP_LISTENER', 'UNIT_SPELLCAST_STOP', function(unit, guid, id)
+    if unit == 'player' and id == 384255 and _reset_talents then
+        _reset_talents = false
+    end
+end)
