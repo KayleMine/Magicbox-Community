@@ -68,8 +68,6 @@ currentTarget = target
     end
     return false
 end
-
-
 function cLineOfSight(target)
     if #tLOS > 0 then
         if tLOS[1].unit == target then
@@ -79,10 +77,6 @@ function cLineOfSight(target)
     end
     return false
 end
-
-
-
-
 
 local function fLOSOnEvent(event, spellFailed, errorMessage, unit)
             if spellFailed == SPELL_FAILED_LINE_OF_SIGHT or
@@ -130,6 +124,7 @@ end)
 
 
 dark_addon.LineOfSight = LineOfSight;
+dark_addon.LoS = cLineOfSight;
  
 function dark_addon.environment.virtual.resolvers.party(members)
   local lowest = 'player'
