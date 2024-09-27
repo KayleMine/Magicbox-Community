@@ -69,6 +69,21 @@ currentTarget = target
     return false
 end
 
+
+function cLineOfSight(target)
+    if #tLOS > 0 then
+        if tLOS[1].unit == target then
+            -- Return true if target is in LoS
+            return true
+        end
+    end
+    return false
+end
+
+
+
+
+
 local function fLOSOnEvent(event, spellFailed, errorMessage, unit)
             if spellFailed == SPELL_FAILED_LINE_OF_SIGHT or
                spellFailed == SPELL_FAILED_NOT_INFRONT or
@@ -122,7 +137,7 @@ function dark_addon.environment.virtual.resolvers.party(members)
   for i = 1, (members - 1) do
     local unit = 'party' .. i
  
-		if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not LineOfSight(unit)
+		if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
 			and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
 		  if not lowest then
 			lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, 'player')
@@ -141,7 +156,7 @@ function dark_addon.environment.virtual.resolvers.raid(members)
   for i = 1, members do
     local unit = 'raid' .. i
 
-	if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not LineOfSight(unit)
+	if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
 		and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
       if not lowest then
         lowest, lowest_health = unit, UnitHealth(unit)
