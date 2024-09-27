@@ -514,8 +514,8 @@ end
 local function spell_castable(spell)
   local spell = C_Spell.GetSpellInfo(spell).name
   local usable, noMana = C_Spell.IsSpellUsable(spell)
-  local inRange = C_Spell.IsSpellInRange(spell, calledUnit.unitID)
-  if usable and inRange == 1 then
+  --local inRange = C_Spell.IsSpellInRange(spell, calledUnit.unitID)
+  if usable and not dark_addon.LineOfSight(calledUnit.unitID) then
     if spell_cooldown(spell) == 0 then
       return true
     else
