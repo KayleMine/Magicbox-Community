@@ -213,13 +213,26 @@ function group.dispellable(spell)
   return group_dispellable(spell)
 end
 
+
+
+function percent_plus_incomingHeal(unitID)
+	--print(unitID)
+	local incomingheals = UnitGetIncomingHeals(unitID) and UnitGetIncomingHeals(unitID) or 0
+	local PercentWithIncoming = 100 * ( UnitHealth(unitID) + incomingheals ) / UnitHealthMax(unitID)
+	local ActualWithIncoming = ( UnitHealthMax(unitID) - ( UnitHealth(unitID) + incomingheals ) )
+	if PercentWithIncoming and ActualWithIncoming then
+		return PercentWithIncoming
+	else
+		return 100
+	end
+end
 local function group_under(percent, distance, effective)
   local count = 0
   for unit in dark_addon.environment.iterator() do
     if unit then
 		if unit.alive and 
 		  ((distance and unit.unitID ~= 'player' and unit.distance <= distance) or not distance or unit.unitID == 'player') and 
-		  ((effective and unit.health.effective < percent) or (not effective and unit.health.percent < percent)) then 
+		  ((effective and unit.health.effective < percent) or (not effective and unit.health.percent_plus_incomingHeal < percent)) then 
 		  count = count + 1
 		end
     end
