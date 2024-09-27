@@ -22,6 +22,19 @@ function health:missing()
   return (UnitHealthMax(self.unitID) - UnitHealth(self.unitID))/UnitHealthMax(self.unitID) * 100
 end
 
+
+function health:percent_plus_incomingHeal()
+	--print(self.unitID)
+	local incomingheals = UnitGetIncomingHeals(self.unitID) and UnitGetIncomingHeals(self.unitID) or 0
+	local PercentWithIncoming = 100 * ( UnitHealth(self.unitID) + incomingheals ) / UnitHealthMax(self.unitID)
+	local ActualWithIncoming = ( UnitHealthMax(self.unitID) - ( UnitHealth(self.unitID) + incomingheals ) )
+	if PercentWithIncoming and ActualWithIncoming then
+		return PercentWithIncoming
+	else
+		return 100
+	end
+end
+
 function dark_addon.environment.conditions.health(unit, called)
   return setmetatable({
     unitID = unit.unitID
