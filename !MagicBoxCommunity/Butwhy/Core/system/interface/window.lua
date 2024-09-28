@@ -2,6 +2,69 @@ local addon, dark_addon = ...
 
 dark_addon.toolkit = { };
 toolkit = dark_addon.toolkit
+
+local talentsFrame
+
+toolkit.show_talents = function(title, talents)
+    if not talentsFrame then
+        -- Create the main talents frame
+        talentsFrame = CreateFrame("Frame", nil, UIParent, "BasicFrameTemplateWithInset")
+        talentsFrame:SetSize(250, 200)
+        talentsFrame:SetPoint("CENTER")
+        talentsFrame:SetMovable(true)
+        talentsFrame:EnableMouse(true)
+        talentsFrame:RegisterForDrag("LeftButton")
+        talentsFrame:SetScript("OnDragStart", talentsFrame.StartMoving)
+        talentsFrame:SetScript("OnDragStop", talentsFrame.StopMovingOrSizing)
+        talentsFrame.title = talentsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+        talentsFrame.title:SetPoint("LEFT", talentsFrame.TitleBg, "LEFT", 5, 0)
+        talentsFrame.title:SetText(title)
+
+        -- Create a scroll frame
+        local scrollFrame = CreateFrame("ScrollFrame", nil, talentsFrame, "UIPanelScrollFrameTemplate")
+        scrollFrame:SetSize(220, 160)
+        scrollFrame:SetPoint("TOP", -10, -25)
+
+        -- Create a content frame inside the scroll frame
+        local content = CreateFrame("Frame", nil, scrollFrame)
+        content:SetSize(230, 600)  -- Set an initial height
+        scrollFrame:SetScrollChild(content)
+
+        -- Create label and textbox for each talent inside the content frame
+        local offsetY = -10
+        for i, talent in pairs(talents) do
+            if talent then
+                local label = content:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                label:SetPoint("TOPLEFT", 20, offsetY)
+                label:SetText(talent.name .. ":")
+
+                local textbox = CreateFrame("EditBox", "Textbox" .. i, content, "InputBoxTemplate")
+                textbox:SetSize(50, 20)
+                textbox:SetPoint("LEFT", label, "RIGHT", 10, 0)
+                textbox:SetAutoFocus(false)
+                textbox:SetText(talent.talent_row)
+
+                offsetY = offsetY - 30  -- Move down for the next row
+            else
+                print("No talent found for index:", i)  -- Debug line
+            end
+        end
+
+        content:SetHeight(-offsetY + 10)  -- Adjust height based on how many items were added
+
+        talentsFrame:Hide()
+    end
+
+    -- Toggle visibility
+    if talentsFrame:IsShown() then
+        talentsFrame:Hide()
+    else
+        talentsFrame:Show()
+    end
+end
+
+
+
 toolkit.checkName = function()
 	return UnitName("player")
 end
