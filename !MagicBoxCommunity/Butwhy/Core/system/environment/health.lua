@@ -24,7 +24,6 @@ end
 
 
 function health:percent_plus_incomingHeal()
-	--print(self.unitID)
 	local incomingheals = UnitGetIncomingHeals(self.unitID) and UnitGetIncomingHeals(self.unitID) or 0
 	local PercentWithIncoming = 100 * ( UnitHealth(self.unitID) + incomingheals ) / UnitHealthMax(self.unitID)
 	local ActualWithIncoming = ( UnitHealthMax(self.unitID) - ( UnitHealth(self.unitID) + incomingheals ) )
@@ -33,6 +32,37 @@ function health:percent_plus_incomingHeal()
 	else
 		return 100
 	end
+end
+
+function health:percent_plus_shields()
+    local totalAbsorbs = UnitGetTotalAbsorbs(self.unitID) or 0
+    local currentHealth = UnitHealth(self.unitID)
+    local maxHealth = UnitHealthMax(self.unitID)
+
+    local effectiveHealth = currentHealth + totalAbsorbs
+    local PercentWithIncoming = 100 * effectiveHealth / maxHealth
+
+    if PercentWithIncoming then
+        return PercentWithIncoming
+    else
+        return 100
+    end
+end
+
+function health:percent_plus_incomingHeal_shields()
+    local incomingheals = UnitGetIncomingHeals(self.unitID) or 0
+    local totalAbsorbs = UnitGetTotalAbsorbs(self.unitID) or 0
+    local currentHealth = UnitHealth(self.unitID)
+    local maxHealth = UnitHealthMax(self.unitID)
+
+    local effectiveHealth = currentHealth + incomingheals + totalAbsorbs
+    local PercentWithIncoming = 100 * effectiveHealth / maxHealth
+
+    if PercentWithIncoming then
+        return PercentWithIncoming
+    else
+        return 100
+    end
 end
 
 function dark_addon.environment.conditions.health(unit, called)
