@@ -54,7 +54,8 @@ end
 	
 
 if not tLOS then tLOS = {} end
-local updateRate = 3
+dark_addon.LoS_updateRate = 3;
+local updateRate = dark_addon.LoS_updateRate
 local currentTarget;
 
 -- LineOfSight function definition
@@ -125,6 +126,7 @@ end)
 
 dark_addon.LineOfSight = LineOfSight;
 dark_addon.LoS = cLineOfSight;
+
  
 function dark_addon.environment.virtual.resolvers.party(members)
   local lowest = 'player'
