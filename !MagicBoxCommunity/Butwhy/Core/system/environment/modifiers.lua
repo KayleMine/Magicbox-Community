@@ -38,6 +38,18 @@ function modifiers:ralt()
   return IsRightAltKeyDown() and GetCurrentKeyBoardFocus() == nil
 end
 
+function modifiers:MouseButton3()
+  return IsMouseButtonDown(3) and GetCurrentKeyBoardFocus() == nil
+end
+
+function modifiers:MouseButton4()
+  return IsMouseButtonDown(4) and GetCurrentKeyBoardFocus() == nil
+end
+
+function modifiers:MouseButton5()
+  return IsMouseButtonDown(5) and GetCurrentKeyBoardFocus() == nil
+end
+
 dark_addon.environment.hooks.modifier = setmetatable({}, {
   __index = function(t, k)
     if modifiers[k] then
