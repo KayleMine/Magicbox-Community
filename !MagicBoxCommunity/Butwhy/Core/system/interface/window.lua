@@ -906,7 +906,8 @@ local function buildElements(table, parent)
       parent:AddChild(tmp_list)
       tmp_list:SetParent(parent.content)
       tmp_list:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-3)
-      tmp_list:SetWidth(180)
+      local wide = element.wide or 180
+      tmp_list:SetWidth(wide)
       local orderdKeys = { }
       local list = { }
       for i, value in pairs(element.list) do
