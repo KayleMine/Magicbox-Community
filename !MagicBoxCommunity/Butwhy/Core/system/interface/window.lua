@@ -826,7 +826,7 @@ local function buildElements(table, parent)
 
     -- Create the text label for the multi-dropdowns
     local tmp_text = DiesalGUI:Create("FontString")
-    tmp_text:SetParent(parent.content)
+    tmp_text:SetParent(parent.frame)
     parent:AddChild(tmp_text)
     tmp_text = tmp_text.fontString
     tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
@@ -904,7 +904,7 @@ local function buildElements(table, parent)
  local tmp_list = DiesalGUI:Create('Dropdown')
       if element.width then tmp_list.settings.width = element.width end
       parent:AddChild(tmp_list)
-      tmp_list:SetParent(parent.content)
+      tmp_list:SetParent(parent.frame)
       tmp_list:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-3)
       tmp_list:SetWidth(180)
       local orderdKeys = { }
