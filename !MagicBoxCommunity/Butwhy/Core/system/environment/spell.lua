@@ -128,8 +128,8 @@ function spell:castable()
 end
 
 function spell:current()
-  local _, _,  _,  _,  _,  _,  _,  _, casting = UnitCastingInfo(self.unitID)
-  local _, _,  _,  _,  _,  _,  _,  _, channel = UnitChannelInfo(self.unitID)
+  local _, _,  _,  _,  _,  _,  _,  casting = UnitCastingInfo(self.unitID)
+  local _, _,  _,  _,  _,  _,  _,  channel = UnitChannelInfo(self.unitID)
   if casting then return self.spell.spellID == casting end
   if channel then return self.spell.spellID == channel end
   return false
