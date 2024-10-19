@@ -124,7 +124,14 @@ function dark_addon.rotation.tick(ticker)
   if not toggled then
     return
   end
-
+	-- disable that = no aoe for you today.
+	if GetCVar("nameplateShowEnemies") == '0' then
+		SetCVar("nameplateShowEnemies", 1)
+	end
+	if GetCVar("nameplateShowAll") == '0' then
+		SetCVar("nameplateShowAll", 1)
+	end
+	-- disable that = no aoe for you today.
   local do_gcd = dark_addon.settings.fetch('_engine_gcd', true)
   local gcd_wait, start, duration = false
   if gcd_spell and do_gcd then
