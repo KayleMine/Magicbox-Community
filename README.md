@@ -3,7 +3,7 @@
 > [!Important]
 > Get unlocker before use.
 >
-> [Api documents](http://f1021975.xsph.ru/#/)
+> [Api documents](https://mgxbox.ru/#/)
 
 > [!TIP]
 > Empty addon with base profile's.
