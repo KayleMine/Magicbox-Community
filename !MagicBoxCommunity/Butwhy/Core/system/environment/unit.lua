@@ -392,7 +392,23 @@ end
 function unit:moving()
   return GetUnitSpeed(self.unitID) ~= 0
 end
+local movingTimes = {}
 
+function unit:movingFor()
+  local unitID = self.unitID
+  if not unitID then
+    return 0
+  end
+  if GetUnitSpeed(unitID) ~= 0 then
+    if not movingTimes[unitID] then
+      movingTimes[unitID] = GetTime()
+    end
+    return GetTime() - movingTimes[unitID]
+  else
+    movingTimes[unitID] = nil
+    return 0
+  end
+end
 function unit:has_stealable()
   local has_stealable = false
   for i = 1, 40 do
