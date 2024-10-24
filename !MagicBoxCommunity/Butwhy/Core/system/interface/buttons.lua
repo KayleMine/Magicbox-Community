@@ -568,15 +568,15 @@ dark_addon.on_ready(function()
   dark_addon.interface.buttons.add_toggle({
     core = true,
     name = 'blacklist_tgl',
-      label = "Blacklist enabled?",
+      label = "Blacklist enabled?\n[macro: /fd toggle blacklist_tgl]",
     font = 'dark_addon_icon',
     on = {
-      label = dark_addon.interface.icon('hand-paper'),
+      label = dark_addon.interface.icon('stop'),
       color = dark_addon.interface.color.green,
       color2 = dark_addon.interface.color.green
     },
     off = {
-      label = dark_addon.interface.icon('hand-paper'),
+      label = dark_addon.interface.icon('stop'),
       color = dark_addon.interface.color.red,
       color2 = dark_addon.interface.color.red
     }
