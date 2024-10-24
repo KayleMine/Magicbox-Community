@@ -564,7 +564,51 @@ dark_addon.on_ready(function()
       color2 = dark_addon.interface.color.red
     }
   })  
-  
+
+  dark_addon.interface.buttons.add_toggle({
+    core = true,
+    name = 'blacklist_tgl',
+      label = "Blacklist enabled?",
+    font = 'dark_addon_icon',
+    on = {
+      label = dark_addon.interface.icon('hand-paper'),
+      color = dark_addon.interface.color.green,
+      color2 = dark_addon.interface.color.green
+    },
+    off = {
+      label = dark_addon.interface.icon('hand-paper'),
+      color = dark_addon.interface.color.red,
+      color2 = dark_addon.interface.color.red
+    }
+  })  
+
+    dark_addon.interface.buttons.add_toggle({
+		core = true,
+        name = 'blacklist',
+        label = 'Blacklist Healing',
+        font = 'dark_addon_icon',
+        on = {
+            label = dark_addon.interface.icon('cog'),
+            color = dark_addon.interface.color.green,
+            color2 = dark_addon.interface.color.green
+        },
+        off = {
+            label = dark_addon.interface.icon('cog'),
+            color = dark_addon.interface.color.red,
+            color2 = dark_addon.interface.color.red
+        },
+        callback = function(self)
+
+		  if dark_addon._blacklisted.parent:IsShown() then
+			dark_addon._blacklisted.parent:Hide()
+		  else
+			dark_addon._blacklisted.parent:Show()
+		  end
+		  return true
+
+        end
+    })
+		
 local item_s = {
 key = "global_settings",
 title = L_ITMS,
