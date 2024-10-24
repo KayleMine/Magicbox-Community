@@ -128,24 +128,56 @@ dark_addon.LineOfSight = LineOfSight;
 dark_addon.LoS = cLineOfSight;
 
  
+dark_addon.is_blacklisted = function(unit)
+if dark_addon.environment.hooks.toggle('blacklist_tgl', false) then
+  -- Fetch the blacklist string each time this function is called
+  local names_string = dark_addon.settings.fetch("_bl_inputkey")
+  local blacklisted_names = {}
+
+  -- Parse the names from the string
+  for name in string.gmatch(names_string, "([^;]+)") do
+    table.insert(blacklisted_names, strtrim(name)) -- strtrim removes leading/trailing spaces
+  end
+
+  -- Check if the unit's name is in the blacklist
+  local unit_name = UnitName(unit)
+
+  for _, blacklisted_name in ipairs(blacklisted_names) do
+    if unit_name == blacklisted_name then
+		--print(unit_name, 'noped')
+      return true
+    end
+  end
+end
+  
+  return false
+end
+
+
+local is_blacklisted = dark_addon.is_blacklisted
+
 function dark_addon.environment.virtual.resolvers.party(members)
   local lowest = 'player'
   local lowest_health
   for i = 1, (members - 1) do
     local unit = 'party' .. i
- 
-		if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
-			and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
-		  if not lowest then
-			lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, 'player')
-		  else
-			lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
-		  end
-		end
- 
+
+    -- Skip the unit if it's blacklisted
+    if not is_blacklisted(unit) then
+      if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+        and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
+          -- Resolve unit health if it's not blacklisted and meets conditions
+          if not lowest then
+            lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, 'player')
+          else
+            lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
+          end
+      end
+    end
   end
   return lowest
 end
+
 
 function dark_addon.environment.virtual.resolvers.raid(members)
   local lowest = 'player'
@@ -153,7 +185,7 @@ function dark_addon.environment.virtual.resolvers.raid(members)
   for i = 1, members do
     local unit = 'raid' .. i
 
-	if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+	if not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
 		and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
       if not lowest then
         lowest, lowest_health = unit, UnitHealth(unit)
@@ -180,7 +212,7 @@ function dark_addon.environment.virtual.resolvers.tanks(assignment)
   if group_type ~= 'solo' then
     for i = 1, (members - 1) do
       local unit = group_type .. i
-      if (GetPartyAssignment(assignment, unit) or (assignment == 'MAINTANK' and UnitGroupRolesAssigned(unit) == 'TANK')) and not UnitCanAttack('player', unit) and not UnitIsDeadOrGhost(unit) then return unit end
+      if not is_blacklisted(unit) and (GetPartyAssignment(assignment, unit) or (assignment == 'MAINTANK' and UnitGroupRolesAssigned(unit) == 'TANK')) and not UnitCanAttack('player', unit) and not UnitIsDeadOrGhost(unit) then return unit end
     end
   end
   return 'player'
