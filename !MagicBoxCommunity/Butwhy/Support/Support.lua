@@ -167,10 +167,11 @@ end
 local group = dark_addon.environment.conditions.group()
 
 -- Generalized function to collect units based on a condition
+-- Generalized function to collect units based on a condition
 local function collect_units(spell, condition)
   local units = {}
   for unit in dark_addon.environment.iterator() do
-    if unit and unit.alive and condition(unit, spell) then
+    if not dark_addon.is_blacklisted(unit.unitID) and unit and unit.alive and condition(unit, spell) then
       table.insert(units, unit)
     end
   end
