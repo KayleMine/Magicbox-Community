@@ -1426,6 +1426,30 @@ dark_addon.on_ready(function()
   configWindow.parent:Hide()
   dark_addon.econf = configWindow
 end)
+
+
+dark_addon.on_ready(function()
+  local _bl = {
+    key = "_bl",
+    title = 'Nah-ah',
+    subtitle = 'No healing for you today.',
+    color = '1F8FB5',
+    profiles = false,
+    width = 650,
+    height = 300,
+    resize = true,
+    show = true,
+    template = {
+      { type = 'header', text = "Player name to blacklist." },
+      { type = 'rule' },
+      { type = "input", key = "inputkey", text = "",desc="Name1; Name2; Name3; ...", width = 545.0 },
+    }
+  }
+  configWindow = builder.buildGUI(_bl)
+  configWindow.parent:Hide()
+  dark_addon._blacklisted = configWindow
+end)
+
 toolkit.PlayedServer = function()
 	return GetRealmName()
 end
