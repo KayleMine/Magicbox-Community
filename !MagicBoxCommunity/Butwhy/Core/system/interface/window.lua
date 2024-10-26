@@ -645,7 +645,56 @@ local function buildElements(table, parent)
       if element.key then
         table.window.elements[element.key] = tmp
       end
+elseif element.type == 'multi_checkbox' then
+		local checkboxes = {}
+		local total_width = 0
 
+		-- Создаем текстовый заголовок для мультичекбоксов
+		local tmp_text = DiesalGUI:Create("FontString")
+		tmp_text:SetParent(parent.content)
+		parent:AddChild(tmp_text)
+		tmp_text = tmp_text.fontString
+		tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset+3)
+		tmp_text:SetText(element.text)
+		tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+		tmp_text:SetJustifyH('LEFT')
+		tmp_text:SetWidth(parent.content:GetWidth() - 10)
+
+		-- Начинаем создание чекбоксов в строку
+		for i = 1, (element.amount or 2) do
+			local x_offset = total_width + 10
+
+			-- Создаем чекбокс
+			local checkbox = DiesalGUI:Create('Toggle')
+			parent:AddChild(checkbox)
+			checkbox:SetParent(parent.content)
+			checkbox:SetPoint("TOPLEFT", parent.content, "TOPLEFT", x_offset + 5, offset - 20)
+
+			-- Метка для каждого чекбокса
+			local checkbox_label = DiesalGUI:Create("FontString")
+			checkbox_label:SetParent(parent.content)
+			parent:AddChild(checkbox_label)
+			checkbox_label = checkbox_label.fontString
+			checkbox_label:SetPoint("LEFT", checkbox.frame, "RIGHT", 5, 0)
+			checkbox_label:SetText(element.lists[i] and element.lists[i].text or "Option " .. i)
+			checkbox_label:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+
+			-- Устанавливаем значения по умолчанию и сохраняем изменения
+			checkbox:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '_' .. i, element.default[i] or false))
+			checkbox:SetEventListener('OnValueChanged', function(this, event, checked)
+				dark_addon.settings.store(table.key .. '_' .. element.key .. '_' .. i, checked)
+			end)
+
+			checkboxes[i] = checkbox
+			total_width = total_width + checkbox:GetWidth() + checkbox_label:GetStringWidth() + (element.spacing or 15) -- Увеличиваем общий горизонтальный отступ
+		end
+
+		-- Сохраняем чекбоксы в таблице элементов
+		if element.key then
+			for i = 1, (element.amount or 2) do
+				table.window.elements[element.key .. i] = checkboxes[i]
+			end
+		end
     elseif element.type == 'checkbox' then
 
       local tmp = DiesalGUI:Create('Toggle')
