@@ -685,6 +685,26 @@ elseif element.type == 'multi_checkbox' then
 				dark_addon.settings.store(table.key .. '_' .. element.key .. '_' .. i, checked)
 			end)
 
+			-- Добавляем подсказки для чекбоксов и их меток
+			local function ShowTooltip()
+				GameTooltip:SetOwner(checkbox.frame, "ANCHOR_NONE")
+				GameTooltip:SetPoint("BOTTOM", checkbox.frame, "TOP", 0, 10)
+				GameTooltip:SetText(element.lists[i] and element.lists[i].tooltip or "", 1, 1, 1)
+				GameTooltip:Show()
+			end
+
+			local function HideTooltip()
+				GameTooltip:Hide()
+			end
+
+			-- Добавляем обработчики событий для чекбокса
+			checkbox:SetEventListener('OnEnter', ShowTooltip)
+			checkbox:SetEventListener('OnLeave', HideTooltip)
+
+			-- Добавляем обработчики событий для метки чекбокса
+			checkbox_label:SetScript("OnEnter", ShowTooltip)
+			checkbox_label:SetScript("OnLeave", HideTooltip)
+
 			checkboxes[i] = checkbox
 			total_width = total_width + checkbox:GetWidth() + checkbox_label:GetStringWidth() + (element.spacing or 15) -- Увеличиваем общий горизонтальный отступ
 		end
