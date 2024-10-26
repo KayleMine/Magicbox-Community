@@ -1118,7 +1118,7 @@ elseif element.type == 'multi_checkbox' then
       offset = offset + -10
     elseif element.type == 'spinner' or element.type == 'checkspin' then
       offset = offset + -20
-    elseif element.type == 'combo' or element.type == 'dropdown' or 'multi_dropdown' then
+    elseif element.type == 'combo' or element.type == 'dropdown' or 'multi_dropdown' or 'multi_checkbox' then
       offset = offset + -20
     elseif element.type == 'texture' then
       offset = offset + -(element.offset or 0)
