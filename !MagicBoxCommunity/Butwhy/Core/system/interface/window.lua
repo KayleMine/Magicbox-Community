@@ -556,6 +556,36 @@ DiesalGUI:RegisterObjectConstructor("Rule", function()
   return self
 end, 1)
 
+
+
+
+local function tooltipper(ancor, tooltip_text, ...)
+    local lock = ancor
+    if not lock then return end
+    
+    -- Define the tooltip display function
+    local function ShowTooltip(element)
+        GameTooltip:SetOwner(lock.frame, "ANCHOR_CURSOR")
+        GameTooltip:SetPoint("BOTTOM", lock.frame, "TOP", 0, 10)
+        GameTooltip:SetText(tooltip_text or "", 1, 1, 1)
+        GameTooltip:Show()
+    end
+    
+    -- Define the tooltip hide function
+    local function HideTooltip()
+        GameTooltip:Hide()
+    end
+    
+    -- Iterate over each element provided
+    for _, elemnt in ipairs{...} do
+        if elemnt then
+            -- Set event listeners
+            elemnt:SetScript('OnEnter', function() ShowTooltip(elemnt) end)
+            elemnt:SetScript('OnLeave', HideTooltip)
+        end
+    end
+end
+
 local function buildElements(table, parent)
   local offset = -5
   for _, element in ipairs(table.template) do
@@ -645,7 +675,7 @@ local function buildElements(table, parent)
       if element.key then
         table.window.elements[element.key] = tmp
       end
-elseif element.type == 'multi_checkbox' then
+	elseif element.type == 'multi_checkbox' then
 		local checkboxes = {}
 		local total_width = 0
 
@@ -745,7 +775,11 @@ elseif element.type == 'multi_checkbox' then
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
       end
-
+		
+	if element.tooltip then
+		tooltipper(tmp, element.tooltip, tmp_f)
+    end
+	
       if element.key then
         table.window.elements[element.key..'Text'] = tmp_text
         table.window.elements[element.key] = tmp
@@ -794,7 +828,9 @@ elseif element.type == 'multi_checkbox' then
       tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
-
+	if element.tooltip then
+		tooltipper(tmp_spin, element.tooltip, tmp_text)
+    end
       if element.desc then
         local tmp_desc = DiesalGUI:Create("FontString")
         tmp_desc:SetParent(parent.content)
@@ -865,7 +901,9 @@ elseif element.type == 'multi_checkbox' then
         tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
 		tmp_check_f:SetJustifyH('LEFT')
       tmp_check:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '.check', element.default_check or false))
-
+	if element.tooltip then
+		tooltipper(tmp_spin, element.tooltip, tmp_text)
+    end
 
       if element.desc then
         local tmp_desc = DiesalGUI:Create("FontString")
@@ -942,6 +980,10 @@ elseif element.type == 'multi_checkbox' then
 
 		tmp_list:SetValue(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '_' .. i, default_value))
 
+	if element.tooltip then
+		tooltipper(tmp_list, element.tooltip, tmp_text)
+    end
+
 		dropdowns[i] = tmp_list
 		total_width = total_width + tmp_list:GetWidth() + (element.spacing or 10) -- Update spacing based on dropdown width
 	end
@@ -1001,6 +1043,10 @@ elseif element.type == 'multi_checkbox' then
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 
+	if element.tooltip then
+		tooltipper(tmp_list, element.tooltip, tmp_text)
+    end
+
       if element.desc then
         local tmp_desc = DiesalGUI:Create("FontString")
         tmp_desc:SetParent(parent.content)
@@ -1040,6 +1086,10 @@ elseif element.type == 'multi_checkbox' then
         element.callback(tmp, 'OnStyle')
       end
       tmp:SetEventListener("OnClick", element.callback)
+
+	if element.tooltip then
+		tooltipper(tmp, element.tooltip)
+    end
 
       if element.desc then
         local tmp_desc = DiesalGUI:Create("FontString")
@@ -1090,6 +1140,12 @@ elseif element.type == 'multi_checkbox' then
       tmp_text:SetText(element.text)
       tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 10)
       tmp_text:SetJustifyH('LEFT')
+
+
+	if element.tooltip then
+		tooltipper(tmp_input, element.tooltip, tmp_text)
+    end
+
 
       if element.desc then
         local tmp_desc = DiesalGUI:Create("FontString")
@@ -1600,7 +1656,7 @@ if isLogin or isReload then
 	if stateval == 2 then
 	-- login()
 		toolkit.ChatMessage()
-		PlaySoundFile([[Interface\AddOns\Feral\Butwhy\Core\media\hai.ogg]], "SFX")  					  
+		PlaySoundFile([[Interface\AddOns\!MagicBoxCommunity\Butwhy\Core\media\hai.ogg]], "SFX")  					  
 		container_frame:Show()
 	end
 end
