@@ -308,7 +308,7 @@ timer =
 		stateval = dark_addon.settings.fetch('ssc')
 		if stateval == 2 then 
 			dark_addon.log("LUA Unlocker Found! Enabled!")
-			Splash('\n'.."LUA Unlocker Found!"..'\n|cff4384D0'.."Enabled...."..'\n|cff0e89d1')
+			--Splash('\n'.."LUA Unlocker Found!"..'\n|cff4384D0'.."Enabled...."..'\n|cff0e89d1')
 		end
         dark_addon.protected = true
         dark_addon.protect_version = "777"
