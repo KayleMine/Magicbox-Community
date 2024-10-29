@@ -1565,7 +1565,7 @@ dark_addon.on_ready(function()
     resize = true,
     show = true,
     template = {
-      { type = 'header', text = "Player name to blacklist." },
+      { type = 'header', text = "Player name to blacklist from healing." },
       { type = 'rule' },
       { type = "input", key = "inputkey", text = "",desc="Name1; Name2; Name3; ...", width = 545.0 },
     }
