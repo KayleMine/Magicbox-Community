@@ -162,81 +162,6 @@ function dark_addon.interface.buttons.add(button)
 end
 
 
-function dark_addon.interface.buttons.addNoColor(button)
-  local frame = CreateFrame('frame', 'dr_button_' .. table.size(buttons), buttons_frame)
-  local index = table.size(buttons)
-  local offset = ( index * button_size ) + ( index * button_padding )
-
-  frame.button = button
-  frame.index = index
-  frame:SetPoint('CENTER', container_frame)
-  frame:SetPoint('LEFT', container_frame, 'LEFT', offset + 2, 0)
-  frame:SetWidth(button_size)
-  frame:SetHeight(button_size)
-  frame:EnableMouse(true)
-  frame:SetFrameStrata('MEDIUM')
-
-  frame.background = frame:CreateTexture()
-  frame.background:SetDrawLayer('BACKGROUND', 1)
-  frame.background:SetAllPoints(frame)
-
-
-  function frame.background:setGradient(colorA, colorB)
-    local minR, minG, minB = dark_addon.interface.color.hexToRgb(colorA)
-    local maxR, maxG, maxB = dark_addon.interface.color.hexToRgb(colorB)
-    self:SetColorTexture(1, 1, 1, 0.85)
-    self:SetGradient('VERTICAL', {r=maxR, g=maxG, b=maxB, a=1}, {r=minR, g=minG, b=minB, a=1}) 
-  end
-  if button.color2 then
-
-    frame.background:setGradient(button.color, button.color2)
-  else
-
-  end
-
-  -- frame.outline = frame:CreateTexture('background')
-  -- frame.outline:SetColorTexture(r, g, b, 0.5)
-  -- frame.outline:SetDrawLayer('BACKGROUND', -1)
-  -- frame.outline:SetPoint('TOPLEFT', frame, 'TOPLEFT', -1, 1)
-  -- frame.outline:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 1, -1)
-
-  frame.text = frame:CreateFontString()
-  frame.text:SetAllPoints(true)
-  frame.text:SetFontObject("dark_addon_bold")
-  frame.text:SetText(button.label)
-
-  button.frame = frame
-
-  frame:SetScript('OnMouseDown', function()
-    button:callback()
-  end)
-
-  frame:SetScript('OnEnter', function(self)
-    local x, y = GetCursorPosition()
-    tooltip_frame:Show()
-    tooltip_frame.text:SetText(button.button.label)
-    tooltip_frame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", -2, -3)
-    tooltip_frame.text:SetPoint("TOPLEFT", tooltip_frame, "TOPLEFT", 5, -5)
-    tooltip_frame:SetWidth(tooltip_frame.text:GetStringWidth() + 11)
-    tooltip_frame:SetHeight(tooltip_frame.text:GetHeight() + 9)
-
-    -- tooltip_frame.text:SetWidth(tooltip_frame:GetRight() - tooltip_frame:GetLeft() - 10)
-    -- tooltip_frame:SetHeight(tooltip_frame.text:GetHeight() + 15)
-  end)
-
-  frame:SetScript('OnLeave', function()
-    tooltip_frame:Hide()
-  end)
-
-  button:init()
-
-  buttons[button.name] = button
-  container_frame:SetWidth((table.size(buttons) * button_size) + (table.size(buttons) * button_padding) + 2)
-  container_frame:SetHeight(button_size + button_padding + 2)
-
-  return frame
-end
-
 function dark_addon.interface.buttons.add_toggle(button)
   dark_addon.interface.buttons.add({
     button = button,
@@ -325,62 +250,6 @@ function dark_addon.interface.buttons.add_toggle(button)
   })
 end
 
-function dark_addon.interface.buttons.add_toggleNoColor(button)
-  dark_addon.interface.buttons.addNoColor({
-    button = button,
-    name = button.name,
-    label = button.label or false,
-    core = button.core or false,
-    label = button.on.text,
-    color = button.on.color or false,
-    state = false,
-
-    toggle_on = function(self)
-      self.frame.text:SetText(button.on.label)
-      if button.label then
-        --dark_addon.interface.status_override(button.label .. ' work? again?', 1)
-      end
-    end,
-
-    toggle_off = function(self)
-      self.frame.text:SetText(button.off.label)
-      if button.label then
-        --dark_addon.interface.status_override(button.label .. ' disable.', 1)
-      end
-    end,
-    callback = function(self)
-      self.state = not self.state
-      if button.callback then
-        button.callback(self)
-      end
-      if self.state then
-        self:toggle_on()
-      else
-        self:toggle_off()
-      end
-      dark_addon.settings.store_toggle(button.name, self.state)
-    end,
-    init = function(self)
-      local state = dark_addon.settings.fetch_toggle(button.name, false)
-      self.state = state
-      if state then
-        self.frame.text:SetText(button.on.label)
-        if button.on.color2 then
-          self.frame.background:setColor('#ffffff')
-        else end
-      else
-        self.frame.text:SetText(button.off.label)
-        if button.off.color2 then
-          self.frame.background:setColor('#ffffff')
-        else end
-      end
-      if button.font then
-        self.frame.text:SetFontObject(button.font)
-      end
-    end
-  })
-end
-
 _G['button'] = buttons
 
 function dark_addon.interface.buttons.reset()
@@ -446,13 +315,13 @@ dark_addon.on_ready(function()
   button_size = dark_addon.settings.fetch('button_size', button_size)
 
   fontObject = CreateFont("dark_addon_regular")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Regular.ttf", button_size / 4,"OUTLINE")
 
   fontObject = CreateFont("dark_addon_bold")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\OpenSans-Bold.ttf", button_size / 4,"OUTLINE")
 
   fontObject = CreateFont("dark_addon_icon")
-  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE, MONOCHROME")
+  fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\Core\\media\\FontAwesomeProRegular.otf", button_size / 2,"OUTLINE")
 
   dark_addon.commands.register({
     command = 'move',
@@ -565,35 +434,45 @@ dark_addon.on_ready(function()
     }
   })  
 
-  dark_addon.interface.buttons.add_toggle({
-    core = true,
-    name = 'blacklist_tgl',
-      label = "Blacklist enabled?\n[macro: /fd toggle blacklist_tgl]",
-    font = 'dark_addon_icon',
-    on = {
-      label = dark_addon.interface.icon('lambda'),
-      color = dark_addon.interface.color.green,
-      color2 = dark_addon.interface.color.green
-    },
-    off = {
-      label = dark_addon.interface.icon('lambda'),
-      color = dark_addon.interface.color.red,
-      color2 = dark_addon.interface.color.red
-    }
-  })  
+
+C_Timer.After(5.5, function()
+local cid = select(3, UnitClass("player"))
+-- 2	Paladin	PALADIN	
+-- 5	Priest	PRIEST	
+-- 7	Shaman	SHAMAN	
+-- 10	Monk	MONK	Added in 5.0.4
+-- 11	Druid	DRUID	
+-- 13	Evoker	EVOKER
+if cid == 13 or cid == 11 or cid == 10 or cid == 7 or cid == 5 or cid == 2 then
+	dark_addon.interface.buttons.add_toggle({
+		core = true,
+		name = 'blacklist_tgl',
+		  label = "Blacklist enabled?\n[macro: /fd toggle blacklist_tgl]",
+		font = 'dark_addon_icon',
+		on = {
+		  label = dark_addon.interface.icon('spider-black-widow'),
+		  color = dark_addon.interface.color.green,
+		  color2 = dark_addon.interface.color.green
+		},
+		off = {
+		  label = dark_addon.interface.icon('spider-black-widow'),
+		  color = dark_addon.interface.color.red,
+		  color2 = dark_addon.interface.color.red
+		}
+	})  
 
     dark_addon.interface.buttons.add_toggle({
 		core = true,
         name = 'blacklist',
-        label = 'Blacklist Healing',
+        label = 'Blacklist Config',
         font = 'dark_addon_icon',
         on = {
-            label = dark_addon.interface.icon('cog'),
+            label = dark_addon.interface.icon('spider-web'),
             color = dark_addon.interface.color.green,
             color2 = dark_addon.interface.color.green
         },
         off = {
-            label = dark_addon.interface.icon('cog'),
+            label = dark_addon.interface.icon('spider-web'),
             color = dark_addon.interface.color.red,
             color2 = dark_addon.interface.color.red
         },
@@ -608,12 +487,14 @@ dark_addon.on_ready(function()
 
         end
     })
-		
+end
+end)
+
 local item_s = {
 key = "global_settings",
 title = L_ITMS,
-width = 280,
-height = 210,
+width = 300,
+height = 310,
 --	color = "3cff00",
 color = "00a2ff",
 resize = false,
@@ -638,7 +519,11 @@ list = {
 { key = 'ot', text = '11 & 12' },
 } },
 { type = "rule"},
+{ type = 'header', text = "Misc.",align = 'CENTER'}, 
 
+{ key = "WarlockFood", type = "checkspin", text = "Warlock HealthStone HP%", desc = "", default_check = false, default_spin = 85, min = 5, max = 100, step = 1 },
+{ key = "PotionsMana", type = "checkspin", text = "Potions: MANA%", desc = "", default_check = false, default_spin = 55, min = 5, max = 100, step = 1 },
+{ key = "PotionsHealth", type = "checkspin", text = "Potions: HP%", desc = "", default_check = false, default_spin = 85, min = 5, max = 100, step = 1 },
 
 }
 }
