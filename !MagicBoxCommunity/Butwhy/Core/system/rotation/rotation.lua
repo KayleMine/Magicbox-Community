@@ -70,7 +70,7 @@ function dark_addon.rotation.load(name)
 	stateval = dark_addon.settings.fetch('ssc')
    if stateval == 2 then 
 		 dark_addon.log(L_LoadedProfileS .. name)
-		 Splash('\n'..color..class..' - '..SpecName..' \n|cff4384D0'.."FunPay-Rotation's"..'\n|cff0e89d1')
+		 --Splash('\n'..color..class..' - '..SpecName..' \n|cff4384D0'.."FunPay-Rotation's"..'\n|cff0e89d1')
    end
   else
     dark_addon.error(L_LoadedProfileF .. name)
