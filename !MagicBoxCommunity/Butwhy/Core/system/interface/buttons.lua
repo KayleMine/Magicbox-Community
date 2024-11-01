@@ -435,7 +435,6 @@ dark_addon.on_ready(function()
   })  
 
 
-C_Timer.After(5.5, function()
 local cid = select(3, UnitClass("player"))
 -- 2	Paladin	PALADIN	
 -- 5	Priest	PRIEST	
@@ -488,7 +487,7 @@ if cid == 13 or cid == 11 or cid == 10 or cid == 7 or cid == 5 or cid == 2 then
         end
     })
 end
-end)
+
 
 local item_s = {
 key = "global_settings",
