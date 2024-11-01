@@ -130,27 +130,25 @@ dark_addon.LoS = cLineOfSight;
  
 dark_addon.is_blacklisted = function(unit)
 if dark_addon.environment.hooks.toggle('blacklist_tgl', false) then
-  -- Fetch the blacklist string each time this function is called
-  local names_string = dark_addon.settings.fetch("_bl_inputkey")
-  local blacklisted_names = {}
-
-  -- Parse the names from the string
-  for name in string.gmatch(names_string, "([^;]+)") do
-    table.insert(blacklisted_names, strtrim(name)) -- strtrim removes leading/trailing spaces
-  end
-
-  -- Check if the unit's name is in the blacklist
-  local unit_name = UnitName(unit)
-
-  for _, blacklisted_name in ipairs(blacklisted_names) do
-    if unit_name == blacklisted_name then
-		--print(unit_name, 'noped')
-      return true
-    end
-  end
+	-- Fetch the blacklist string each time this function is called
+	local names_string = dark_addon.settings.fetch("_bl_inputkey")
+	local blacklisted_names = {}
+	if names_string then
+	  -- Parse the names from the string
+	  for name in string.gmatch(names_string, "([^;]+)") do
+		table.insert(blacklisted_names, strtrim(name)) -- strtrim removes leading/trailing spaces
+	  end
+	  -- Check if the unit's name is in the blacklist
+	  local unit_name = UnitName(unit)
+	  for _, blacklisted_name in ipairs(blacklisted_names) do
+		if unit_name == blacklisted_name then
+			--print(unit_name, 'noped')
+		  return true
+		end
+	  end
+	end
+	return false
 end
-  
-  return false
 end
 
 
