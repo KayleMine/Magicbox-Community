@@ -902,7 +902,7 @@ local function buildElements(table, parent)
 		tmp_check_f:SetJustifyH('LEFT')
       tmp_check:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '.check', element.default_check or false))
 	if element.tooltip then
-		tooltipper(tmp_spin, element.tooltip, tmp_text)
+		tooltipper(tmp_spin, element.tooltip, tmp_check.fontString)
     end
 
       if element.desc then
