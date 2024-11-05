@@ -746,8 +746,7 @@ local function buildElements(table, parent)
 			end
 		end
     elseif element.type == 'checkbox' then
-
-      local tmp = DiesalGUI:Create('Toggle')
+local tmp = DiesalGUI:Create('Toggle')
       parent:AddChild(tmp)
       tmp:SetParent(parent.content)
       tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
@@ -755,14 +754,24 @@ local function buildElements(table, parent)
       tmp:SetEventListener('OnValueChanged', function(this, event, checked)
         dark_addon.settings.store(table.key .. '_' .. element.key, checked)
       end)
-        tmp_f = tmp.fontString
+        --tmp_f = tmp.fontString\
+		local tmp_f = DiesalGUI:Create("FontString")
+        tmp_f:SetParent(parent.content)
+        parent:AddChild(tmp_f)
+        tmp_f = tmp_f.fontString
+		
 		tmp_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
         tmp_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_f:SetText(element.text)
         tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
-      tmp.checkBoxStyle = checkBoxStyle
-      tmp:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key, element.default or false))
-      if element.desc then
+		tmp.checkBoxStyle = checkBoxStyle
+		tmp:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key, element.default or false))
+      		
+		if element.tooltip then
+			tooltipper(tmp, element.tooltip, tmp_f)
+		end
+	
+	  if element.desc then
         local tmp_desc = DiesalGUI:Create("FontString")
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
@@ -775,16 +784,12 @@ local function buildElements(table, parent)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
       end
-		
-	if element.tooltip then
-		tooltipper(tmp, element.tooltip, tmp_f)
-    end
+
 	
       if element.key then
         table.window.elements[element.key..'Text'] = tmp_text
         table.window.elements[element.key] = tmp
       end
-
     elseif element.type == 'spinner' then
 
       local tmp_spin = DiesalGUI:Create('Spinner')
