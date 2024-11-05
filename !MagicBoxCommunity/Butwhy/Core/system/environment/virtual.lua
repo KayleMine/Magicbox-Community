@@ -180,21 +180,21 @@ end
 function dark_addon.environment.virtual.resolvers.raid(members)
   local lowest = 'player'
   local lowest_health
-  for i = 1, members do
+  for i = 1, (members - 1) do
     local unit = 'raid' .. i
 
-	if not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
-		and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
+    if not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+      and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
+      
       if not lowest then
         lowest, lowest_health = unit, UnitHealth(unit)
       else
         lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
       end
     end
+  end
 
-
- return lowest
-end
+  return lowest
 end
 
 function dark_addon.environment.virtual.resolvers.tank(unit)
