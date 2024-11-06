@@ -776,8 +776,8 @@ local function buildElements(table, parent)
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
         tmp_desc:SetText(element.desc)
         tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
@@ -917,8 +917,8 @@ local function buildElements(table, parent)
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
         tmp_desc:SetText(element.desc)
         tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
@@ -1179,8 +1179,8 @@ local function buildElements(table, parent)
 
     if element.type == 'rule' then
       offset = offset + -10
-    elseif element.type == 'spinner' or element.type == 'checkspin' then
-      offset = offset + -20
+    elseif element.type == 'spinner' or element.type == 'checkspin' or 'checkbox' then
+      offset = offset + -25
     elseif element.type == 'combo' or element.type == 'dropdown' or 'multi_dropdown' or 'multi_checkbox' then
       offset = offset + -22
     elseif element.type == 'texture' then
