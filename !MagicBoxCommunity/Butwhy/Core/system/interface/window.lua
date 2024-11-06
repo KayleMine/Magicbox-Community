@@ -100,13 +100,13 @@ toolkit.CheckColorHex = function()
 	if SelectClass == "DEATHKNIGHT" then -- +
 		return "8c0d22"
 	elseif SelectClass == "DRUID" then -- +
-		return "c25f08"
+		return "a14f06"
 	elseif SelectClass == "HUNTER" then -- +
-		return "ABD473"
+		return "7a9653"
 	elseif SelectClass == "MAGE" then -- +
-		return "69CCF0"
+		return "4d8ab3"
 	elseif SelectClass == "PALADIN" then
-		return "F48CBA"
+		return "80425d"
 	elseif SelectClass == "MONK" then
 		return "45d585"
 	elseif SelectClass == "DEMONHUNTER" then -- +
