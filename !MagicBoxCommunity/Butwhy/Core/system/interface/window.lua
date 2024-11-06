@@ -64,7 +64,6 @@ toolkit.show_talents = function(title, talents)
 end
 
 
-
 toolkit.checkName = function()
 	return UnitName("player")
 end
@@ -406,7 +405,7 @@ local WindowStylesheet = {
     layer = 'BACKGROUND',
    -- color = 'ffaa00',
      gradient = {'VERTICAL','9A2617','ffaa00'},
-	 alpha = 0.5,
+	 alpha = 1,
   },
   ['frame-shadow'] = {
     type = 'shadow',
@@ -467,7 +466,7 @@ local WindowStylesheet = {
     layer = 'BACKGROUND',
    -- color = 'ffaa00',
    gradient = {'VERTICAL','54200a',_G.toolkit.CheckColorHex()},
-    alpha = 0.66,
+    alpha = 0.88,
   },
   ['content-outline'] = {
     type  = 'outline',
@@ -558,7 +557,6 @@ end, 1)
 
 
 
-
 local function tooltipper(ancor, tooltip_text, ...)
     local lock = ancor
     if not lock then return end
@@ -586,6 +584,8 @@ local function tooltipper(ancor, tooltip_text, ...)
     end
 end
 
+
+
 local function buildElements(table, parent)
   local offset = -5
   for _, element in ipairs(table.template) do
@@ -602,7 +602,7 @@ local function buildElements(table, parent)
             else
                 tmp:SetJustifyH('LEFT')
             end
-      tmp:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 14)
+      tmp:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 11, "OUTLINE")
       tmp:SetWidth(parent.content:GetWidth()-10)
 
       if element.align then
@@ -612,7 +612,6 @@ local function buildElements(table, parent)
       if element.key then
         table.window.elements[element.key] = tmp
       end
-
     elseif element.type == 'text' then
 
 		local tmp = DiesalGUI:Create("FontString")
@@ -628,7 +627,7 @@ local function buildElements(table, parent)
 		tmp:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, y_offset)
 		tmp:SetText(element.text)
 		tmp:SetJustifyH('LEFT')
-		tmp:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", element.size or 12)
+		tmp:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
 		tmp:SetWidth(parent.content:GetWidth() - 10)
 
 		if not element.offset then
@@ -686,7 +685,7 @@ local function buildElements(table, parent)
 		tmp_text = tmp_text.fontString
 		tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset+3)
 		tmp_text:SetText(element.text)
-		tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+		tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
 		tmp_text:SetJustifyH('LEFT')
 		tmp_text:SetWidth(parent.content:GetWidth() - 10)
 
@@ -707,7 +706,7 @@ local function buildElements(table, parent)
 			checkbox_label = checkbox_label.fontString
 			checkbox_label:SetPoint("LEFT", checkbox.frame, "RIGHT", 5, 0)
 			checkbox_label:SetText(element.lists[i] and element.lists[i].text or "Option " .. i)
-			checkbox_label:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+			checkbox_label:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 11)
 
 			-- Устанавливаем значения по умолчанию и сохраняем изменения
 			checkbox:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '_' .. i, element.default[i] or false))
@@ -746,7 +745,8 @@ local function buildElements(table, parent)
 			end
 		end
     elseif element.type == 'checkbox' then
-local tmp = DiesalGUI:Create('Toggle')
+
+      local tmp = DiesalGUI:Create('Toggle')
       parent:AddChild(tmp)
       tmp:SetParent(parent.content)
       tmp:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
@@ -763,7 +763,7 @@ local tmp = DiesalGUI:Create('Toggle')
 		tmp_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
         tmp_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_f:SetText(element.text)
-        tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
 		tmp.checkBoxStyle = checkBoxStyle
 		tmp:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key, element.default or false))
       		
@@ -776,10 +776,10 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-15)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-15)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -790,6 +790,7 @@ local tmp = DiesalGUI:Create('Toggle')
         table.window.elements[element.key..'Text'] = tmp_text
         table.window.elements[element.key] = tmp
       end
+
     elseif element.type == 'spinner' then
 
       local tmp_spin = DiesalGUI:Create('Spinner')
@@ -830,7 +831,7 @@ local tmp = DiesalGUI:Create('Toggle')
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-4)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 	if element.tooltip then
@@ -841,10 +842,10 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -903,9 +904,10 @@ local tmp = DiesalGUI:Create('Toggle')
 		tmp_check_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 25, offset)
         tmp_check_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_check_f:SetText(element.text)
-        tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
 		tmp_check_f:SetJustifyH('LEFT')
       tmp_check:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '.check', element.default_check or false))
+	
 	if element.tooltip then
 		tooltipper(tmp_spin, element.tooltip, tmp_check.fontString)
     end
@@ -915,10 +917,10 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 11)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
 		tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -943,7 +945,7 @@ local tmp = DiesalGUI:Create('Toggle')
     tmp_text = tmp_text.fontString
     tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
     tmp_text:SetText(element.text)
-    tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+    tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
     tmp_text:SetJustifyH('LEFT')
     tmp_text:SetWidth(parent.content:GetWidth() - 10)
 
@@ -1002,7 +1004,7 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset - 30) -- Adjust the position as needed
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset - 30)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth() - 10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -1044,7 +1046,7 @@ local tmp = DiesalGUI:Create('Toggle')
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 
@@ -1057,10 +1059,10 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-15)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-15)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 12)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('CENTER')
         push = tmp_desc:GetStringHeight() + 5
@@ -1104,7 +1106,7 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-element.height-3)
         tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-element.height-3)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 9)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('LEFT')
         push = tmp_desc:GetStringHeight() + 5
@@ -1143,7 +1145,7 @@ local tmp = DiesalGUI:Create('Toggle')
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 10)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
       tmp_text:SetJustifyH('LEFT')
 
 
@@ -1157,10 +1159,10 @@ local tmp = DiesalGUI:Create('Toggle')
         tmp_desc:SetParent(parent.content)
         parent:AddChild(tmp_desc)
         tmp_desc = tmp_desc.fontString
-        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-18)
-        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-18)
+        tmp_desc:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-25)
+        tmp_desc:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", -5, offset-25)
         tmp_desc:SetText(element.desc)
-        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Consolas.ttf", 9)
+        tmp_desc:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
         tmp_desc:SetWidth(parent.content:GetWidth()-10)
         tmp_desc:SetJustifyH('LEFT')
         push = tmp_desc:GetStringHeight() + 5
@@ -1180,7 +1182,7 @@ local tmp = DiesalGUI:Create('Toggle')
     elseif element.type == 'spinner' or element.type == 'checkspin' then
       offset = offset + -20
     elseif element.type == 'combo' or element.type == 'dropdown' or 'multi_dropdown' or 'multi_checkbox' then
-      offset = offset + -20
+      offset = offset + -22
     elseif element.type == 'texture' then
       offset = offset + -(element.offset or 0)
     elseif element.type == "text" then
@@ -1542,7 +1544,7 @@ dark_addon.on_ready(function()
     template = {
       { type = 'header', text = L_Pst },
       { type = 'rule' },
-      { key = 'tickrate', type = 'spinner', text = L_TickRate, desc = L_TickRateDesc, min = 0.01, max = 1.00, step = 0.05, default = 0.2 },
+      { key = 'tickrate', type = 'spinner', text = L_TickRate, desc = L_TickRateDesc, min = 0.01, max = 1.00, step = 0.05, default = 0.2 }, 
       { key = 'gcd', type = 'checkbox', text = L_GCDC, desc = L_GCDCDesc, default = true },
       { type = 'spacer' },
       { type = 'spacer' },
@@ -1556,7 +1558,6 @@ dark_addon.on_ready(function()
   configWindow.parent:Hide()
   dark_addon.econf = configWindow
 end)
-
 
 dark_addon.on_ready(function()
   local _bl = {
@@ -1661,7 +1662,7 @@ if isLogin or isReload then
 	if stateval == 2 then
 	-- login()
 		toolkit.ChatMessage()
-		PlaySoundFile([[Interface\AddOns\!MagicBoxCommunity\Butwhy\Core\media\hai.ogg]], "SFX")  					  
+		PlaySoundFile([[Interface\AddOns\Feral\Butwhy\Core\media\hai.ogg]], "SFX")  					  
 		container_frame:Show()
 	end
 end
