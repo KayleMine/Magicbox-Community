@@ -760,8 +760,8 @@ local function buildElements(table, parent)
         parent:AddChild(tmp_f)
         tmp_f = tmp_f.fontString
 		
-		tmp_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset)
-        tmp_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
+		tmp_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 25, offset)
+      -- tmp_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_f:SetText(element.text)
         tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
 		tmp.checkBoxStyle = checkBoxStyle
