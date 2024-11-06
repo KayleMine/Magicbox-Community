@@ -685,7 +685,7 @@ local function buildElements(table, parent)
 		tmp_text = tmp_text.fontString
 		tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset+3)
 		tmp_text:SetText(element.text)
-		tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+		tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
 		tmp_text:SetJustifyH('LEFT')
 		tmp_text:SetWidth(parent.content:GetWidth() - 10)
 
@@ -706,7 +706,7 @@ local function buildElements(table, parent)
 			checkbox_label = checkbox_label.fontString
 			checkbox_label:SetPoint("LEFT", checkbox.frame, "RIGHT", 5, 0)
 			checkbox_label:SetText(element.lists[i] and element.lists[i].text or "Option " .. i)
-			checkbox_label:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 11)
+			checkbox_label:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.lists[i] and element.lists[i].size or 11)
 
 			-- Устанавливаем значения по умолчанию и сохраняем изменения
 			checkbox:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '_' .. i, element.default[i] or false))
@@ -763,7 +763,7 @@ local function buildElements(table, parent)
 		tmp_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 25, offset)
       -- tmp_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_f:SetText(element.text)
-        tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+        tmp_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
 		tmp.checkBoxStyle = checkBoxStyle
 		tmp:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key, element.default or false))
       		
@@ -831,7 +831,7 @@ local function buildElements(table, parent)
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-4)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 	if element.tooltip then
@@ -904,7 +904,7 @@ local function buildElements(table, parent)
 		tmp_check_f:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 25, offset)
         tmp_check_f:SetPoint("TOPRIGHT", parent.content, "TOPRIGHT", 0, offset)
         tmp_check_f:SetText(element.text)
-        tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+        tmp_check_f:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
 		tmp_check_f:SetJustifyH('LEFT')
       tmp_check:SetChecked(dark_addon.settings.fetch(table.key .. '_' .. element.key .. '.check', element.default_check or false))
 	
@@ -945,7 +945,7 @@ local function buildElements(table, parent)
     tmp_text = tmp_text.fontString
     tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
     tmp_text:SetText(element.text)
-    tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+    tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
     tmp_text:SetJustifyH('LEFT')
     tmp_text:SetWidth(parent.content:GetWidth() - 10)
 
@@ -1046,7 +1046,7 @@ local function buildElements(table, parent)
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
       tmp_text:SetJustifyH('LEFT')
       tmp_text:SetWidth(parent.content:GetWidth()-10)
 
@@ -1145,7 +1145,7 @@ local function buildElements(table, parent)
       tmp_text = tmp_text.fontString
       tmp_text:SetPoint("TOPLEFT", parent.content, "TOPLEFT", 5, offset-3)
       tmp_text:SetText(element.text)
-      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", 9)
+      tmp_text:SetFont("Interface\\Addons\\!MagicBoxCommunity\\Butwhy\\core\\media\\Furore.otf", element.size or 9)
       tmp_text:SetJustifyH('LEFT')
 
 
