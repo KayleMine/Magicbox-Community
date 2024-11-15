@@ -13,6 +13,7 @@
 	<Script file="Butwhy\Core\system\interface\window.lua" />
 	<Script file="Butwhy\Core\system\interface\buttons.lua" />
 	<Script file="Butwhy\Core\system\Misc\Listener.lua" />
+	<Script file="Butwhy\Core\system\Misc\RangeFinder.lua" />
 	<Script file="Butwhy\Core\system\environment\environment.lua" />
 	<Script file="Butwhy\Core\system\environment\logical.lua" />
 	<Script file="Butwhy\Core\system\environment\virtual.lua" />
