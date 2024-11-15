@@ -229,38 +229,24 @@ end
 
 -- Call this once at initialization to populate preCachedItems
 preloadFriendItems()
+ 
+dark_addon.RaidRanges = function(unitID)
+    -- Ensure the unit is valid and can be assisted
+    if not UnitCanAssist("player", unitID) then
+        return 1000 -- Default range if unit is not friendly or invalid
+    end
 
--- Function to process all raid members efficiently
-dark_addon.RaidRanges = function()
-    local rangeResults = {}
-    local numRaidMembers = GetNumGroupMembers()
-
-    for i = 1, numRaidMembers do
-        local unit = "raid" .. i
-
-        if UnitCanAssist("player", unit) then
-            -- Check items for the current unit
-            for range, items in pairs(FriendItems) do
-                for _, item in ipairs(items) do
-                    if preCachedItems[item] then
-                        local isInRange = IsItemInRange(item, unit)
-                        if isInRange then
-                            rangeResults[unit] = range
-                            break
-                        end
-                    end
+    -- Iterate through FriendItems to determine range
+    for range, items in pairs(FriendItems) do
+        for _, item in ipairs(items) do
+            if preCachedItems[item] then
+                local isInRange = IsItemInRange(item, unitID)
+                if isInRange then
+                    return range -- Return the detected range immediately
                 end
-
-                -- If a range was found, no need to check further for this unit
-                if rangeResults[unit] then break end
             end
-        end
-
-        -- Default range if no items match
-        if not rangeResults[unit] then
-            rangeResults[unit] = 1000
         end
     end
 
-    return rangeResults
+    return 1000 -- Default range if no items match
 end
