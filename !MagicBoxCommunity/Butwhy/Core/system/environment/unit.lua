@@ -6,7 +6,7 @@ local runeforge = {}
 local unit = {}
 local calledUnit
 
-dummies = {
+local dummies = {
 -- Misc/Unknown
 	[79987]  = "Training Dummy", 	          -- Location Unknown
 	[92169]  = "Raider's Training Dummy",     -- Tanking (Eastern Plaguelands)
@@ -360,7 +360,7 @@ local function channeling(spell)
   if channeling_spell then
     if spell then
       if tonumber(spell) then
-        spell = GetSpellInfo(spell)
+        spell = C_Spell.GetSpellInfo(spell)
       end
       if channeling_spell == spell then
         return true
@@ -409,6 +409,7 @@ function unit:movingFor()
     return 0
   end
 end
+
 function unit:has_stealable()
   local has_stealable = false
   for i = 1, 40 do
@@ -448,7 +449,7 @@ end
 
 local function unit_in_range(spell)
   if tonumber(spell) then
-    name = GetSpellInfo(spell)
+    name = C_Spell.GetSpellInfo(spell)
   end
   return C_Spell.IsSpellInRange(spell, calledUnit.unitID) == 1
 end
@@ -459,7 +460,7 @@ end
 
 local function totem_cooldown(name)
   if tonumber(name) then
-    name = GetSpellInfo(name)
+    name = C_Spell.GetSpellInfo(name)
   end
   local haveTotem, totemName, startTime, duration
   for i = 1, 4 do
