@@ -127,7 +127,6 @@ end)
 dark_addon.LineOfSight = LineOfSight;
 dark_addon.LoS = cLineOfSight;
 
- 
 dark_addon.is_blacklisted = function(unit)
 if dark_addon.environment.hooks.toggle('blacklist_tgl', false) then
 	-- Fetch the blacklist string each time this function is called
@@ -151,6 +150,19 @@ if dark_addon.environment.hooks.toggle('blacklist_tgl', false) then
 end
 end
 
+local function filtred(unit, spellId)
+    for i = 1, 40 do
+        local aura = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
+        if not aura then
+            break
+        end
+        if aura.spellId == spellId then
+            return true
+        end
+    end
+    return false
+end
+
 
 local is_blacklisted = dark_addon.is_blacklisted
 
@@ -161,7 +173,7 @@ function dark_addon.environment.virtual.resolvers.party(members)
     local unit = 'party' .. i
 
     -- Skip the unit if it's blacklisted
-    if not is_blacklisted(unit) then
+    if not filtred(unit, 255274) and not is_blacklisted(unit) then
       if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
         and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
           -- Resolve unit health if it's not blacklisted and meets conditions
@@ -183,7 +195,7 @@ function dark_addon.environment.virtual.resolvers.raid(members)
   for i = 1, (members - 1) do
     local unit = 'raid' .. i
 
-    if not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+    if not filtred(unit, 255274) and not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
       and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
       
       if not lowest then
