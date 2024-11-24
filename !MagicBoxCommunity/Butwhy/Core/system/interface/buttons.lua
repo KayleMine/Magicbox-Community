@@ -75,12 +75,19 @@ buttons_frame:SetAllPoints(container_frame)
 function dark_addon.interface.buttons.add(button)
   local frame = CreateFrame('frame', 'dr_button_' .. table.size(buttons), buttons_frame)
   local index = table.size(buttons)
-  local offset = ( index * button_size ) + ( index * button_padding )
+  
+  -- Параметры строк и столбцов
+  local buttons_per_row = 7
+  local row = math.floor(index / buttons_per_row)
+  local column = index % buttons_per_row
+
+  -- Вычисляем позицию кнопки
+  local offset_x = (column * button_size) + (column * button_padding)
+  local offset_y = -(row * button_size) - (row * button_padding)
 
   frame.button = button
   frame.index = index
-  frame:SetPoint('CENTER', container_frame)
-  frame:SetPoint('LEFT', container_frame, 'LEFT', offset + 2, 0)
+  frame:SetPoint('TOPLEFT', container_frame, 'TOPLEFT', offset_x + button_padding, offset_y - button_padding)
   frame:SetWidth(button_size)
   frame:SetHeight(button_size)
   frame:EnableMouse(true)
@@ -101,18 +108,6 @@ function dark_addon.interface.buttons.add(button)
     self:SetColorTexture(1, 1, 1, 0.85)
     self:SetGradient('VERTICAL', {r=maxR, g=maxG, b=maxB, a=1}, {r=minR, g=minG, b=minB, a=1}) 
   end
-  if button.color2 then
-    frame.background:setColor('#ffffff')
-    frame.background:setGradient(button.color, button.color2)
-  else
-
-  end
-
-  -- frame.outline = frame:CreateTexture('background')
-  -- frame.outline:SetColorTexture(r, g, b, 0.5)
-  -- frame.outline:SetDrawLayer('BACKGROUND', -1)
-  -- frame.outline:SetPoint('TOPLEFT', frame, 'TOPLEFT', -1, 1)
-  -- frame.outline:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', 1, -1)
 
   frame.text = frame:CreateFontString()
   frame.text:SetAllPoints(true)
@@ -131,16 +126,12 @@ function dark_addon.interface.buttons.add(button)
     else
       button:set_color_off(0.75)
     end
-    local x, y = GetCursorPosition()
     tooltip_frame:Show()
     tooltip_frame.text:SetText(button.button.label)
     tooltip_frame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", -2, -3)
     tooltip_frame.text:SetPoint("TOPLEFT", tooltip_frame, "TOPLEFT", 5, -5)
     tooltip_frame:SetWidth(tooltip_frame.text:GetStringWidth() + 11)
     tooltip_frame:SetHeight(tooltip_frame.text:GetHeight() + 9)
-
-    -- tooltip_frame.text:SetWidth(tooltip_frame:GetRight() - tooltip_frame:GetLeft() - 10)
-    -- tooltip_frame:SetHeight(tooltip_frame.text:GetHeight() + 15)
   end)
 
   frame:SetScript('OnLeave', function()
@@ -155,11 +146,28 @@ function dark_addon.interface.buttons.add(button)
   button:init()
 
   buttons[button.name] = button
-  container_frame:SetWidth((table.size(buttons) * button_size) + (table.size(buttons) * button_padding) + 2)
-  container_frame:SetHeight(button_size + button_padding + 2)
+
+  -- Пересчитываем размеры контейнера
+  local total_buttons = table.size(buttons)
+  local total_rows = math.ceil(total_buttons / buttons_per_row)
+
+  -- Максимальная ширина строки
+  local max_row_width = (buttons_per_row * button_size) + ((buttons_per_row - 1) * button_padding)
+  
+  -- Ширина и высота контейнера
+  local container_width = max_row_width + button_padding * 2
+  local container_height = (total_rows * button_size) + ((total_rows - 1) * button_padding) + button_padding * 2
+
+  container_frame:SetWidth(container_width)
+  container_frame:SetHeight(container_height)
+
+  -- Обновляем фон
+  container_frame.background:SetWidth(container_width)
+  container_frame.background:SetHeight(container_height)
 
   return frame
 end
+
 
 
 function dark_addon.interface.buttons.add_toggle(button)
