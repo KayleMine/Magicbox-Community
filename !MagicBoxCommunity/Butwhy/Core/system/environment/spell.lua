@@ -98,12 +98,12 @@ function spell:recharge()
 end
 
 function spell:recharge_duration()
-  local current_charges, max_charges, cooldown_start, cooldown_duration = GetSpellCharges(self.spell.spellID)
+  local max_charges, cooldown_start, _, current_charges, cooldown_duration = GetSpellCharges(self.spell.spellID)
   return cooldown_duration
 end
 
 function spell:full_recharge_time()
-  local current_charges, max_charges, cooldown_start, cooldown_duration = GetSpellCharges(self.spell.spellID)
+  local max_charges, cooldown_start, _, current_charges, cooldown_duration = GetSpellCharges(self.spell.spellID)
   if not current_charges then return 0 end
   local diff = max_charges - current_charges
   if not current_charges or diff == 0 then return 0 end
@@ -128,8 +128,8 @@ function spell:castable()
 end
 
 function spell:current()
-  local _, _,  _,  _,  _,  _,  _,  casting = UnitCastingInfo(self.unitID)
-  local _, _,  _,  _,  _,  _,  _,  channel = UnitChannelInfo(self.unitID)
+  local _, _,  _,  _,  _,  _,  _, casting = UnitCastingInfo(self.unitID)
+  local _, _,  _,  _,  _,  _,  _, channel = UnitChannelInfo(self.unitID)
   if casting then return self.spell.spellID == casting end
   if channel then return self.spell.spellID == channel end
   return false
