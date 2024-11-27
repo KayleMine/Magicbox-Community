@@ -229,24 +229,28 @@ end
 
 -- Call this once at initialization to populate preCachedItems
 preloadFriendItems()
+
+local function _IsItemInRange(item, unitID)
+	if issecure() and IsItemInRange then --ояебу ну так точно нет проблем
+        return IsItemInRange(item, unitID)
+	end
+	return false
+end
  
 dark_addon.RaidRanges = function(unitID)
-    -- Ensure the unit is valid and can be assisted
+    -- Проверяем возможность взаимодействия с юнитом
     if not UnitCanAssist("player", unitID) then
-        return 1000 -- Default range if unit is not friendly or invalid
+        return 1000 -- Вернуть максимальную дистанцию, если юнит недоступен
     end
 
-    -- Iterate through FriendItems to determine range
+    -- Проверяем диапазоны и предметы
     for range, items in pairs(FriendItems) do
         for _, item in ipairs(items) do
-            if preCachedItems[item] then
-                local isInRange = IsItemInRange(item, unitID)
-                if isInRange then
-                    return range -- Return the detected range immediately
-                end
+            if preCachedItems[item] and _IsItemInRange(item, unitID) then
+                return range -- Немедленно вернуть диапазон, если условие выполнено
             end
         end
     end
 
-    return 1000 -- Default range if no items match
+    return 1000 -- Вернуть максимальную дистанцию, если ничего не найдено
 end

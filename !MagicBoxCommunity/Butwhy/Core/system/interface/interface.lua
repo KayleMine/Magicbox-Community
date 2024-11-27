@@ -9,13 +9,13 @@ local GetSpellInfo = C_Spell.GetSpellInfo
 local fontObject
 
 fontObject = CreateFont("dark_addon_regular")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\core\\media\\OpenSans-Regular.ttf", 14, "OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\Magicbox-Community\\core\\media\\OpenSans-Regular.ttf", 14, "OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_bold")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\core\\media\\OpenSans-Bold.ttf", 14, "OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\Magicbox-Community\\core\\media\\OpenSans-Bold.ttf", 14, "OUTLINE, MONOCHROME")
 
 fontObject = CreateFont("dark_addon_icon")
-fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\core\\media\\FontAwesomeProRegular.otf", 18, "OUTLINE, MONOCHROME")
+fontObject:SetFont("Interface\\Addons\\Magicbox-Community\\core\\media\\FontAwesomeProRegular.otf", 18, "OUTLINE, MONOCHROME")
 
 
 local bytemarkers = { {0x7FF,192}, {0xFFFF,224}, {0x1FFFFF,240} }
