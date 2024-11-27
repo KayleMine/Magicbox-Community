@@ -101,41 +101,53 @@ local dispel_spell = {
     [278326] = { "Magic" }
 }
 
-
-local forbiddenDebuffs = {
-	[426736] = true,
-	[451224] = true,
-	[450095] = true,
-	[442437] = true,
-	[443305] = true,
-}
-    
-local function ValidType(debuffType, spellID)
-	local typesList = dispel_spell[spellID]
-	if not typesList then return false end
-	for _, validType in ipairs(typesList) do
-		if validType == debuffType then
-			return true
-		end
-	end
-	return false
-end
-	
 local function canDispel(Unit, spellID)
-    local isFriend = UnitIsFriend(Unit, 'player')
-    if not UnitPhaseReason(Unit) and isFriend then
-        for i = 1, 40 do
-            local _, _, _, debuffType, _, _, _, _, _, debuffID = UnitDebuff(Unit, i)
-            if not debuffType then break end
-            if forbiddenDebuffs[debuffID] then break end
-            if ValidType(debuffType, spellID) then
-                return true
+	local function ValidType(debuffType, spellID)
+		local typesList = dispel_spell[spellID]
+		if not typesList then
+			return false
+		end
+		for _, validType in ipairs(typesList) do
+			if validType == debuffType then
+				return true
+			end
+		end
+		return false
+	end
+
+
+    local function GetUnitIsFriend(Unit, otherUnit)
+        return UnitIsVisible(Unit) and UnitIsVisible(otherUnit) and UnitIsFriend(Unit, otherUnit)
+    end
+
+    local i = 1
+    if not UnitPhaseReason(Unit) then
+        if UnitIsFriend(Unit, 'player') then
+            while true do
+                local _, _, _, debuffType, _, _, _, _, _, debuffID = UnitDebuff(Unit, i)
+				 
+                if not debuffType then break end
+
+				if debuffID == 426736 or debuffID == 451224 or debuffID == 450095 or debuffID == 442437 or debuffID == 443305 then break end
+                if ValidType(debuffType, spellID) then
+                    return true
+                end
+                i = i + 1
+            end
+        else
+            -- Check for buffs to purge
+            while true do
+                local _, _, _, buffType, _, _, _, _, _, buffID = UnitBuff(Unit, i)
+                if not buffType then break end
+                if ValidType(buffType, spellID) and not UnitIsPlayer(Unit) then
+                    return true
+                end
+                i = i + 1
             end
         end
-	end
+    end
     return false
 end
-
 
 local function group_dispellable(spell)
   return group_match(function (unit)

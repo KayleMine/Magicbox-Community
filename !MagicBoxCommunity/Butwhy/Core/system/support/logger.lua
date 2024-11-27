@@ -7,7 +7,7 @@ dark_addon.console = {
 }
 
 local fontObject = CreateFont("dark_addon_console")
-fontObject:SetFont("Interface\\Addons\\Magicbox-Community\\butwhy\\core\\media\\Furore.otf", 9, "")
+fontObject:SetFont("Interface\\Addons\\!MagicBoxCommunity\\butwhy\\core\\media\\Furore.otf", 9, "")
 
 local consoleFrame = CreateFrame('ScrollingMessageFrame', 'dark_addon_console', UIParent)
 
