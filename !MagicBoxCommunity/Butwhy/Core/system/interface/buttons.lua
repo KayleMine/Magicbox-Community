@@ -39,7 +39,7 @@ container_frame.text:SetText('Перетащи меня!')
 container_frame.text:Hide()
 
 container_frame.background = container_frame:CreateTexture()
-container_frame.background:SetColorTexture(0, 0, 0, 0.75)
+container_frame.background:SetColorTexture(0, 0, 0, 0.65)
 container_frame.background:SetAllPoints(container_frame)
 container_frame.background:SetDrawLayer('BACKGROUND')
 
@@ -167,8 +167,6 @@ function dark_addon.interface.buttons.add(button)
 
   return frame
 end
-
-
 
 function dark_addon.interface.buttons.add_toggle(button)
   dark_addon.interface.buttons.add({
@@ -495,7 +493,6 @@ if cid == 13 or cid == 11 or cid == 10 or cid == 7 or cid == 5 or cid == 2 then
         end
     })
 end
-
 
 local item_s = {
 key = "global_settings",

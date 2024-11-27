@@ -128,7 +128,7 @@ local function getAllTalents()
 						talents[talentID].rank = node.activeRank or 0
 						
 						if talents[talentID].active and IsPlayerSpell(talentID) then
-					
+ 
 						-- Store talent using talentID as the key, not as part of an array
 						dark_addon.rotation.allTalents[talentID] = { 
 							id = talentID, 

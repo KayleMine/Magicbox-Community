@@ -6,7 +6,7 @@ local buff = { }
 
 function buff:exists()
   local buff, count, duration, expires, caster, _, id   = UnitBuff(self.unitID, self.spell, 'any')
-  if id == self.spell and (caster == 'player' or caster == 'pet') then
+  if id == self.spell and (not self.casterCheck and (caster == 'player' or caster == 'pet')) then
     return true
   end
   return false
@@ -30,7 +30,7 @@ end
 
 function buff:count()
   local buff, count, duration, expires, caster, _, id  = UnitBuff(self.unitID, self.spell, 'any')
-  if id == self.spell and (caster == 'player' or caster == 'pet') then
+  if id == self.spell and (not self.casterCheck and (caster == 'player' or caster == 'pet')) then
     return count
   end
   return 0
@@ -38,7 +38,7 @@ end
 
 function buff:remains()
   local buff, count, duration, expires, caster, _, id = UnitBuff(self.unitID, self.spell, 'any')
-  if id == self.spell and (caster == 'player' or caster == 'pet') then
+  if id == self.spell and (not self.casterCheck and (caster == 'player' or caster == 'pet')) then
     return expires - GetTime()
   end
   return 0
@@ -46,7 +46,7 @@ end
 
 function buff:duration()
   local buff, count, duration, expires, caster = UnitBuff(self.unitID, self.spell, 'any')
-  if buff and (caster == 'player' or caster == 'pet') then
+  if buff and (not self.casterCheck and (caster == 'player' or caster == 'pet')) then
     return duration
   end
   return 0
@@ -64,7 +64,7 @@ function dark_addon.environment.conditions.buff(unit)
   return setmetatable({
     unitID = unit.unitID
   }, {
-    __index = function(self, func)
+    __index = function(self, func, bool)
       local result = buff[func](self)
       dark_addon.console.debug(4, 'buff', 'green', self.unitID .. '.buff(' .. tostring(self.spell) .. ').' .. func .. ' = ' .. dark_addon.format(result))
       return result
@@ -76,6 +76,11 @@ function dark_addon.environment.conditions.buff(unit)
       else
         self.spell = arg
       end
+	  if type(bool) == 'boolean' then
+		self.casterCheck = bool or false
+	  else
+		self.casterCheck = false -- uh, retard moment (._.)
+	  end
       return self
     end,
     __unm = function(t)

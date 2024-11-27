@@ -150,19 +150,20 @@ if dark_addon.environment.hooks.toggle('blacklist_tgl', false) then
 end
 end
 
-local function filtred(unit, spellId)
-    for i = 1, 40 do
-        local aura = C_UnitAuras.GetAuraDataByIndex(unit, i, "HELPFUL")
-        if not aura then
-            break
-        end
-        if aura.spellId == spellId then
-            return true
-        end
-    end
-    return false
-end
 
+
+local function has_buffs(unit)
+  local max_aura_checks = 40  -- ограничение на количество проверяемых аур
+
+  for i = 1, max_aura_checks do
+    local name, _, _, _, _, _, _, _, _, spell_id = UnitBuff(unit, i)
+    if not name then break end  -- если ауры закончились, выходим из цикла
+	if spell_id == 27827 then return true end
+	if spell_id == 255274 then return true end -- cause i had only 2 buffs to avoid at least now, im fine with that i guess...
+  end
+
+  return false  -- если цикл завершился и баффы не найдены
+end
 
 local is_blacklisted = dark_addon.is_blacklisted
 
@@ -172,11 +173,9 @@ function dark_addon.environment.virtual.resolvers.party(members)
   for i = 1, (members - 1) do
     local unit = 'party' .. i
 
-    -- Skip the unit if it's blacklisted
-    if not filtred(unit, 255274) and not is_blacklisted(unit) then
+    if not has_buffs(unit) and not is_blacklisted(unit) then
       if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
         and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
-          -- Resolve unit health if it's not blacklisted and meets conditions
           if not lowest then
             lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, 'player')
           else
@@ -195,7 +194,7 @@ function dark_addon.environment.virtual.resolvers.raid(members)
   for i = 1, (members - 1) do
     local unit = 'raid' .. i
 
-    if not filtred(unit, 255274) and not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+    if not has_buffs(unit) and not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
       and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
       
       if not lowest then

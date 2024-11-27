@@ -40,7 +40,7 @@ for i = 1, 7 do
 end
 
 local centerLine = myLines[3]
-local centerText = "Aload - An Example routine"
+local centerText = "Magic - |11.0.5"
 centerLine:SetText(centerText)
 centerLine:SetJustifyH("CENTER")
 centerLine:SetWidth(centerLine:GetStringWidth() + 90) -- add some padding to the width
@@ -50,16 +50,18 @@ if GetLocale() == "ruRU" then
 myLines[1]:SetText("1. Макросы в Discord канале.")
 myLines[2]:SetText("2. Пиши /fd list:")
 -- line 3
-myLines[4]:SetText("     Теперь пиши: /fd load Aload")
+myLines[4]:SetText("     Теперь пиши: /fd load Magic")
 myLines[5]:SetText("3. Нажми на 1 кнопку и готово.")
 myLines[6]:SetText("4. Вопросы и Баг-репорты в Discord.")
+myLines[7]:SetText("5. 'Magic' это id ротации!")
 else	
 myLines[1]:SetText("1. Macro can be found in Discord channel.")
 myLines[2]:SetText("2. Type /fd list and get all profiles:")
 -- line 3
-myLines[4]:SetText("2.2 Now type in chat: /fd load Aload")
+myLines[4]:SetText("2.2 Now type in chat: /fd load Magic")
 myLines[5]:SetText("3. Now switch-on 1st button, and you done.")
 myLines[6]:SetText("4. For support or bug-report visit discord.")
+myLines[7]:SetText("5. 'Magic' is ROTATION ID!")
 end
 
 -- create the button with blue color
