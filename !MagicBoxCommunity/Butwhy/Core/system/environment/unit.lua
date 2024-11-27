@@ -619,17 +619,19 @@ end
 	
 local function canDispel(Unit, spellID)
     local isFriend = UnitIsFriend(Unit, 'player')
-    if not UnitPhaseReason(Unit) and isFriend then
+    if isFriend then
         for i = 1, 40 do
-            local _, _, _, debuffType, _, _, _, _, _, debuffID = UnitDebuff(Unit, i)
-            if not debuffType then break end
-            if forbiddenDebuffs[debuffID] then break end
-            if ValidType(debuffType, spellID) then
+            local debuffType = C_UnitAuras.GetDebuffDataByIndex( Unit, i)
+			
+			if not debuffType then break end
+			local dispelName = debuffType.dispelName
+			local sid = debuffType.spellId
+            if forbiddenDebuffs[sid] then break end
+            if ValidType(dispelName, spellID) then
                 return true
             end
         end
-    end
-
+	end
     return false
 end
 

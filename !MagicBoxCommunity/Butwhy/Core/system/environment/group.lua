@@ -123,12 +123,15 @@ end
 	
 local function canDispel(Unit, spellID)
     local isFriend = UnitIsFriend(Unit, 'player')
-    if not UnitPhaseReason(Unit) and isFriend then
+    if isFriend then
         for i = 1, 40 do
-            local _, _, _, debuffType, _, _, _, _, _, debuffID = UnitDebuff(Unit, i)
-            if not debuffType then break end
-            if forbiddenDebuffs[debuffID] then break end
-            if ValidType(debuffType, spellID) then
+            local debuffType = C_UnitAuras.GetDebuffDataByIndex( Unit, i)
+			
+			if not debuffType then break end
+			local dispelName = debuffType.dispelName
+			local sid = debuffType.spellId
+            if forbiddenDebuffs[sid] then break end
+            if ValidType(dispelName, spellID) then
                 return true
             end
         end
@@ -158,7 +161,7 @@ function percent_plus_incomingHeal(unitID)
 		return PercentWithIncoming
 	else
 		return 100
-	end
+	end	
 end
  
 local function group_under(percent, distance, effective)
@@ -166,8 +169,8 @@ local function group_under(percent, distance, effective)
   for unit in dark_addon.environment.iterator() do
     if unit then
 		if unit.alive and 
-		  ((distance and unit.unitID ~= 'player' and dark_addon.RaidRanges(unit.unitID) <= distance) or not distance or unit.unitID == 'player') and 
-		  ((effective and unit.health.effective < percent) or (not effective and unit.health.percent_plus_incomingHeal < percent)) then 
+		  ((distance and unit.unitID ~= 'player' and UnitInRange(unit.unitID)) or not distance or unit.unitID == 'player') and 
+		  ((effective and unit.health.effective < percent) or (not effective and unit.health.percent < percent)) then 
 		  count = count + 1
 		end
     end
