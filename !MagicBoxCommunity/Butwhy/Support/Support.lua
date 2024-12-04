@@ -36,6 +36,25 @@ support.checkforSet = function(tier)
   return count
 end
 
+local itemsets = {
+  ["tier_t30_priest"] = { 202543, 202541 },
+  ["tier_t29_priest"] = { 202543, 202541 },
+}
+
+support.checkforSet = function(tier)
+  local set = itemsets[tier]
+  if not set then
+    return false
+  end
+  local count = 0
+  for _, v in ipairs(set) do
+    if IsEquippedItem(v) then
+      count = count + 1
+    end
+  end
+  return count
+end
+
 support.W_Enchant = function(enchantId)
     local hasEnchant = false
     local _, _, _, mainEnchantId, _, _, _, offEnchantId = GetWeaponEnchantInfo()
@@ -168,14 +187,23 @@ local group = dark_addon.environment.conditions.group()
 
 -- Generalized function to collect units based on a condition
 local function collect_units(spell, condition)
-  local units = {}
+  local units = {} -- Локальная таблица для хранения подходящих юнитов
+  local count = 0  -- Счётчик юнитов
+
   for unit in dark_addon.environment.iterator() do
-    if not dark_addon.is_blacklisted(unit.unitID) and unit and unit.alive and condition(unit, spell) then
-      table.insert(units, unit)
+    -- Упрощённые проверки для минимизации вызовов
+    if unit and unit.alive and not dark_addon.is_blacklisted(unit.unitID) then
+      -- Выполняем проверку по условию
+      if condition(unit, spell) then
+        count = count + 1
+        units[count] = unit -- Используем прямое индексирование вместо table.insert
+      end
     end
   end
-  return units
+
+  return units -- Возвращаем список юнитов
 end
+
 
 -- Conditions for buff/debuff checks
 local function is_buffable(unit, spell)
@@ -222,6 +250,48 @@ support.CreateMacro = function(macroName, macroCommand)
         CreateMacro(macroName, "INV_MISC_QUESTIONMARK", macroCommand, 1)
     end
 end
+
+
+
+
+local combat_start_time = 0
+local combat_duration = 0
+
+-- Функция вызывается при входе в бой
+local function CombatTime_EnterCombat()
+    combat_start_time = GetTime() -- сохраняем время начала боя
+end
+
+-- Функция вызывается при выходе из боя
+local function CombatTime_ExitCombat()
+    if combat_start_time > 0 then
+        combat_duration = GetTime() - combat_start_time
+        combat_start_time = 0 -- сбрасываем время начала боя
+    end
+end
+
+-- Функция, которая возвращает текущее время в бою
+local function GetCurrentCombatTime()
+    if combat_start_time > 0 then
+		local time_in_combat = GetTime() - combat_start_time
+        return tonumber(string.format("%.2f", time_in_combat))
+    else
+        return 0
+    end
+end
+
+support.combat_time = GetCurrentCombatTime;
+
+
+-- Слушатель для отслеживания событий входа и выхода из боя
+dark_addon.Listener:Add("combat_tracker_enabled", "PLAYER_REGEN_ENABLED", function()
+    CombatTime_ExitCombat()
+end)
+
+dark_addon.Listener:Add("combat_tracker_disabled", "PLAYER_REGEN_DISABLED", function()
+    CombatTime_EnterCombat()
+end)
+
 
 for _, func in pairs(support) do
     setfenv(func, dark_addon.environment.env)

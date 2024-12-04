@@ -62,37 +62,138 @@ function dark_addon.environment.hook(func)
   setfenv(func, dark_addon.environment.env)
 end
 
-function dark_addon.environment.iterator(raw)
-  local members = GetNumGroupMembers()
+-- function dark_addon.environment.iterator(raw)
+  -- local members = GetNumGroupMembers()
+  -- local group_type = IsInRaid() and 'raid' or IsInGroup() and 'party' or 'solo'
+  -- local index = 0
+  -- local returned_solo = false
+  -- return function()
+    -- local called
+    -- if group_type == 'solo' and not returned_solo then
+      -- returned_solo = true
+      -- called = 'player'
+    -- elseif group_type ~= 'solo' then
+      -- if index <= members then
+        -- index = index + 1
+        -- if group_type == 'party' and index == members then
+          -- called = 'player'
+        -- else
+          -- called = group_type .. index
+        -- end
+      -- end
+    -- end
+    -- if called then
+      -- if raw then
+        -- return called
+      -- end
+      -- if not dark_addon.environment.unit_cache[called] then
+        -- dark_addon.environment.unit_cache[called] = dark_addon.environment.conditions.unit(called)
+      -- end
+      -- return dark_addon.environment.unit_cache[called]
+    -- end
+  -- end
+-- end
+-- Итератор для членов группы
+-- function dark_addon.environment.iterator(raw)
+  -- local group_type = dark_addon.environment.group_type_cache
+  -- local members = dark_addon.environment.members_cache or 1
+  -- local index = 0
+  -- local returned_solo = false
+
+  -- -- Если группа обновилась, пересчитать тип и размер группы
+  -- if not group_type or not members then
+    -- members = GetNumGroupMembers()
+    -- group_type = IsInRaid() and 'raid' or IsInGroup() and 'party' or 'solo'
+    -- dark_addon.environment.group_type_cache = group_type
+    -- dark_addon.environment.members_cache = members
+  -- end
+
+  -- return function()
+    -- local called
+    -- if group_type == 'solo' and not returned_solo then
+      -- returned_solo = true
+      -- called = 'player'
+    -- elseif group_type ~= 'solo' then
+      -- index = index + 1
+      -- if index <= members then
+        -- if group_type == 'party' and index == members then
+          -- called = 'player'
+        -- else
+          -- called = group_type .. index
+        -- end
+      -- end
+    -- end
+    -- if called then
+      -- if raw then
+        -- return called
+      -- end
+      -- dark_addon.environment.unit_cache[called] = dark_addon.environment.unit_cache[called] 
+        -- or dark_addon.environment.conditions.unit(called)
+      -- return dark_addon.environment.unit_cache[called]
+    -- end
+  -- end
+-- end
+
+-- -- Функция для обновления кэша группы
+-- local function update_group_cache()
+  -- dark_addon.environment.group_type_cache = nil
+  -- dark_addon.environment.members_cache = nil
+  -- dark_addon.environment.unit_cache = {}
+-- end
+
+-- -- Регистрация событий через dark_addon.Listener
+-- dark_addon.Listener:Add("roster", "GROUP_ROSTER_UPDATE", update_group_cache)
+-- dark_addon.Listener:Add("the_world", "PLAYER_ENTERING_WORLD", update_group_cache)
+
+
+
+-- Кэш группы
+local group_cache = {}
+
+-- Обновление кэша группы
+local function refresh_group_cache()
   local group_type = IsInRaid() and 'raid' or IsInGroup() and 'party' or 'solo'
-  local index = 0
-  local returned_solo = false
-  return function()
-    local called
-    if group_type == 'solo' and not returned_solo then
-      returned_solo = true
-      called = 'player'
-    elseif group_type ~= 'solo' then
-      if index <= members then
-        index = index + 1
-        if group_type == 'party' and index == members then
-          called = 'player'
-        else
-          called = group_type .. index
-        end
-      end
-    end
-    if called then
-      if raw then
-        return called
-      end
-      if not dark_addon.environment.unit_cache[called] then
-        dark_addon.environment.unit_cache[called] = dark_addon.environment.conditions.unit(called)
-      end
-      return dark_addon.environment.unit_cache[called]
+  local members = GetNumGroupMembers()
+  group_cache = {} -- Очистить старый кэш
+
+  if group_type == 'solo' then
+    table.insert(group_cache, 'player')
+  else
+    for i = 1, members do
+      local unit = (group_type == 'party' and i == members) and 'player' or (group_type .. i)
+      table.insert(group_cache, unit)
     end
   end
 end
+
+-- Итератор по кэшу группы
+function dark_addon.environment.iterator(raw)
+  local index = 0
+  return function()
+    index = index + 1
+    local unitID = group_cache[index]
+    if not unitID then return nil end
+
+    if raw then
+      return unitID
+    end
+
+    dark_addon.environment.unit_cache[unitID] = dark_addon.environment.unit_cache[unitID] 
+      or dark_addon.environment.conditions.unit(unitID)
+    return dark_addon.environment.unit_cache[unitID]
+  end
+end
+
+-- Регистрация обновления кэша при событиях
+dark_addon.Listener:Add("rost", "GROUP_ROSTER_UPDATE", refresh_group_cache)
+dark_addon.Listener:Add("pew","PLAYER_ENTERING_WORLD", refresh_group_cache)
+
+-- Первоначальная инициализация кэша
+refresh_group_cache()
+
+
+
+
 
 dark_addon.environment.hooks.each_member = dark_addon.environment.iterator
 

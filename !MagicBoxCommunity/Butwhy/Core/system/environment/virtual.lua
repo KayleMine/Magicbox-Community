@@ -167,45 +167,90 @@ end
 
 local is_blacklisted = dark_addon.is_blacklisted
 
-function dark_addon.environment.virtual.resolvers.party(members)
-  local lowest = 'player'
-  local lowest_health
-  for i = 1, (members - 1) do
-    local unit = 'party' .. i
+-- function dark_addon.environment.virtual.resolvers.party(members)
+  -- local lowest = 'player'
+  -- local lowest_health
+  -- for i = 1, (members - 1) do
+    -- local unit = 'party' .. i
 
-    if not has_buffs(unit) and not is_blacklisted(unit) then
-      if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+    -- if not has_buffs(unit) and not is_blacklisted(unit) then
+      -- if not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+        -- and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
+          -- if not lowest then
+            -- lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, 'player')
+          -- else
+            -- lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
+          -- end
+      -- end
+    -- end
+  -- end
+  -- return lowest
+-- end
+
+
+-- function dark_addon.environment.virtual.resolvers.raid(members)
+  -- local lowest = 'player'
+  -- local lowest_health
+  -- for i = 1, (members - 1) do
+    -- local unit = 'raid' .. i
+
+    -- if not has_buffs(unit) and not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
+      -- and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
+      
+      -- if not lowest then
+        -- lowest, lowest_health = unit, UnitHealth(unit)
+      -- else
+        -- lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
+      -- end
+    -- end
+  -- end
+
+  -- return lowest
+-- end
+
+
+local function find_lowest_health_member(group_type, members) -- негр воркер
+  local lowest = 'player'
+  local lowest_health = UnitHealth(lowest)
+	-- print('-------')
+    -- local start_time = debugprofilestop()
+    -- print('1. '..start_time)
+
+  for i = 1, (members - 1) do
+    local unit = group_type .. i
+
+    if not has_buffs(unit) 
+        and not is_blacklisted(unit) 
+        and not UnitCanAttack('player', unit) 
+        and UnitIsVisible(unit) 
+        and UnitIsConnected(unit) 
+        and UnitInRange(unit) 
+        and not UnitIsDeadOrGhost(unit) 
+        and not cLineOfSight(unit)
         and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
-          if not lowest then
-            lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, 'player')
-          else
-            lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
-          end
+      
+      if not lowest or UnitHealth(unit) < lowest_health then
+        lowest = unit
+        lowest_health = UnitHealth(unit)
       end
     end
   end
+    -- local end_time = debugprofilestop()
+	-- print('2. '..end_time)
+    -- local diff = end_time - start_time
+	-- print(string.format('Lowest detection Difference: %.1f ms', diff))
+    -- print('-------')
   return lowest
 end
 
+-- Функция для проверки участников группы
+function dark_addon.environment.virtual.resolvers.party(members)
+  return find_lowest_health_member('party', members)
+end
 
+-- Функция для проверки участников рейда
 function dark_addon.environment.virtual.resolvers.raid(members)
-  local lowest = 'player'
-  local lowest_health
-  for i = 1, (members - 1) do
-    local unit = 'raid' .. i
-
-    if not has_buffs(unit) and not is_blacklisted(unit) and not UnitCanAttack('player', unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and UnitInRange(unit) and not UnitIsDeadOrGhost(unit) and not cLineOfSight(unit)
-      and (not dark_addon.environment.virtual.exclude_tanks or not dark_addon.environment.virtual.resolvers.tank(unit)) then
-      
-      if not lowest then
-        lowest, lowest_health = unit, UnitHealth(unit)
-      else
-        lowest, lowest_health = dark_addon.environment.virtual.resolvers.unit(unit, lowest)
-      end
-    end
-  end
-
-  return lowest
+  return find_lowest_health_member('raid', members)
 end
 
 function dark_addon.environment.virtual.resolvers.tank(unit)
@@ -215,15 +260,29 @@ end
 function dark_addon.environment.virtual.resolvers.tanks(assignment)
   local members = GetNumGroupMembers()
   local group_type = GroupType()
-  if UnitExists('focus') and UnitIsVisible(unit) and UnitIsConnected(unit) and not UnitCanAttack('player', 'focus') and not UnitIsDeadOrGhost('focus') and assignment == 'MAINTANK' then
+
+  if UnitExists('focus') 
+      and UnitIsVisible('focus') 
+      and UnitIsConnected('focus') 
+      and not UnitCanAttack('player', 'focus') 
+      and not UnitIsDeadOrGhost('focus') 
+      and assignment == 'MAINTANK' then
     return 'focus'
   end
+
   if group_type ~= 'solo' then
     for i = 1, (members - 1) do
       local unit = group_type .. i
-      if not is_blacklisted(unit) and (GetPartyAssignment(assignment, unit) or (assignment == 'MAINTANK' and UnitGroupRolesAssigned(unit) == 'TANK')) and not UnitCanAttack('player', unit) and not UnitIsDeadOrGhost(unit) then return unit end
+      if not is_blacklisted(unit) 
+          and (GetPartyAssignment(assignment, unit) 
+          or (assignment == 'MAINTANK' and UnitGroupRolesAssigned(unit) == 'TANK')) 
+          and not UnitCanAttack('player', unit) 
+          and not UnitIsDeadOrGhost(unit) then
+        return unit
+      end
     end
   end
+
   return 'player'
 end
 
