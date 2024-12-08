@@ -131,7 +131,7 @@ local function canDispel(Unit, spellID)
 			local dispelName = debuffType.dispelName
 			local sid = debuffType.spellId
             if forbiddenDebuffs[sid] then break end
-            if ValidType(dispelName, spellID) then
+            if ValidType(dispelName, spellID) or tonumber(sid) == 440313 then
                 return true
             end
         end

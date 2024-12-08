@@ -260,6 +260,7 @@ function dark_addon.rotation.tick(ticker)
 
 	if dark_addon.rotation.active_rotation then
 	if IsMounted() then return end
+	if IsMounted() then return end
 
 
 	if elkek ~= lastLag then

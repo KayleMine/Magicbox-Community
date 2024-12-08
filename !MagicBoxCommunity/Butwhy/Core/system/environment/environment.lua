@@ -93,6 +93,7 @@ end
     -- end
   -- end
 -- end
+
 -- Итератор для членов группы
 -- function dark_addon.environment.iterator(raw)
   -- local group_type = dark_addon.environment.group_type_cache
@@ -152,6 +153,10 @@ local group_cache = {}
 
 -- Обновление кэша группы
 local function refresh_group_cache()
+		-- print('-------')
+    -- local start_time = debugprofilestop()
+    -- print('1. '..start_time)
+
   local group_type = IsInRaid() and 'raid' or IsInGroup() and 'party' or 'solo'
   local members = GetNumGroupMembers()
   group_cache = {} -- Очистить старый кэш
@@ -164,6 +169,11 @@ local function refresh_group_cache()
       table.insert(group_cache, unit)
     end
   end
+      -- local end_time = debugprofilestop()
+	-- print('2. '..end_time)
+    -- local diff = end_time - start_time
+	-- print(string.format('Lowest detection Difference: %.1f ms', diff))
+    -- print('-------')
 end
 
 -- Итератор по кэшу группы
