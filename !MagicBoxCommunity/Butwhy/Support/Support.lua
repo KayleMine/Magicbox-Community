@@ -185,24 +185,30 @@ end
 
 local group = dark_addon.environment.conditions.group()
 
--- Generalized function to collect units based on a condition
-local function collect_units(spell, condition)
-  local units = {} -- Локальная таблица для хранения подходящих юнитов
-  local count = 0  -- Счётчик юнитов
+-- Предполагается, что dark_addon.environment.iterator() уже кэширован заранее
+-- Также заранее можно сохранить ссылки на часто используемые функции.
+local iterator = dark_addon.environment.iterator
+local is_blacklisted = dark_addon.is_blacklisted
 
-  for unit in dark_addon.environment.iterator() do
-    -- Упрощённые проверки для минимизации вызовов
-    if unit and unit.alive and not dark_addon.is_blacklisted(unit.unitID) then
-      -- Выполняем проверку по условию
+local function collect_units(spell, condition)
+  local units = {}
+  local count = 0
+  local iter = iterator() -- получаем итератор один раз
+
+  for unit in iter do
+    -- Сохраняем необходимые значения в локальные переменные для ускорения доступа
+    local unitID = unit.unitID
+    if unit.alive and not is_blacklisted(unitID) then
       if condition(unit, spell) then
         count = count + 1
-        units[count] = unit -- Используем прямое индексирование вместо table.insert
+        units[count] = unit
       end
     end
   end
 
-  return units -- Возвращаем список юнитов
+  return units
 end
+
 
 
 -- Conditions for buff/debuff checks
@@ -292,6 +298,45 @@ dark_addon.Listener:Add("combat_tracker_disabled", "PLAYER_REGEN_DISABLED", func
     CombatTime_EnterCombat()
 end)
 
+
+
+
+
+local function onUpdate(self, elapsed)
+	if self.time < GetTime() - 2.8 then
+	if self:GetAlpha() <= 0 then
+	self:Hide()
+		else
+	local newAlpha = self:GetAlpha() - 0.05
+	if newAlpha < 0 then
+		newAlpha = 0
+	end
+		self:SetAlpha(newAlpha)
+	end
+	end
+end
+local notify = CreateFrame("Frame",nil,ChatFrame1)
+notify:SetSize(ChatFrame1:GetWidth(),30)
+notify:Hide()
+notify:SetScript("OnUpdate",onUpdate)
+notify:SetPoint("TOP",0,0)
+notify.text = notify:CreateFontString(nil,"OVERLAY","MovieSubtitleFont")
+notify.text:SetAllPoints()
+notify.texture = notify:CreateTexture()
+notify.texture:SetAllPoints()
+notify.texture:SetColorTexture(0,0,0,0.40) 
+notify.time = 0
+function notify:message(message) 
+	self:SetSize(ChatFrame1:GetWidth(),30)
+	self.text:SetText(message)
+	self:SetAlpha(1)
+	self.time = GetTime() 
+	self:Show() 
+end
+
+support.msg = function(message)
+	notify:message(message) 
+end
 
 for _, func in pairs(support) do
     setfenv(func, dark_addon.environment.env)
