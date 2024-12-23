@@ -189,6 +189,7 @@ local dummies = {
 	[189632] = "Animated Duelist", 			  -- Valdrakken (Raider's Training Dummy)
 	[189617] = "Boulderfist", 			      -- Valdrakken (Raider's Tanking Dummy)
 	[225985] = "XXX", 			      -- XXX (Raider's Tanking Dummy)
+	[225982] = "XXX", 			      -- XXX (Raider's Tanking Dummy)
 }  
 
 function dummy(unitID)

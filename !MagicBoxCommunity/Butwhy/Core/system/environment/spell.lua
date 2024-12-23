@@ -117,6 +117,7 @@ end
 
 function spell:castable()
   local usable, noMana = C_Spell.IsSpellUsable(self.spell.spellID)
+  --print(usable, noMana, FlexIcon(self.spell.spellID), self.cooldown)
   if usable then
     if self.cooldown == 0 then
       return true

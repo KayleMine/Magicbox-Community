@@ -114,7 +114,9 @@ toolkit.CheckColorHex = function()
 	elseif SelectClass == "PRIEST" then  -- +
 		return "7A7B7C"
 	elseif SelectClass == "ROGUE" then -- ~~
-		return "E6CC80"
+		return "E6CC80"	
+	elseif SelectClass == "EVOKER" then -- ~~
+		return "00CCDD"
 	elseif SelectClass == "SHAMAN" then  -- +
 		return "0070DD"
 	elseif SelectClass == "WARLOCK" then  -- +
@@ -123,6 +125,7 @@ toolkit.CheckColorHex = function()
 		return "C69B6D"
 	end
 end
+
 
 local builder = { }
 
@@ -1502,11 +1505,13 @@ if (GetLocale() == "ruRU") then
  L_Pst = 'Производительность'
  L_TickRate = 'Тик-Рейт'
  L_GCDC =  'Проверка на гкд'
+ L_btnnotify =  'Notify кнпк'
  L_Turbo = 'Турбо'
  L_CLIP = 'Клип'
 
  L_TickRateDesc = 'Тикрейт ротации в секундах. [0.1 Деф.]'
  L_GCDCDesc = 'Ставить ротацию на паузу при гкд.'
+ L_btnnotifyDesc = 'В режиме hide показывать переключение кнопки.'
  L_TurboDesc = 'Турбо режим.' -- turbo
  L_CLIPDesc = 'Время в секундах, перед попыткой скастить спелл при гкд. [0.15 Деф.]'
 
@@ -1516,12 +1521,14 @@ if (GetLocale() == "ruRU") then
  else
  L_Pst = 'Performance'
  L_TickRate = 'Tick Rate'
- L_GCDC =  'GCD Check'
+ L_GCDC =  'Btn toggle notify'
+ L_btnnotify =  'GCD Check'
  L_Turbo = 'Turbo'
  L_CLIP = 'Clip'
 
  L_TickRateDesc = 'The core ticket rate, in seconds.  Default is 0.1'
  L_GCDCDesc = 'Attempt to pause the rotation during the GCD.'
+ L_btnnotifyDesc = 'Show notify on btn tggle in hide mode.'
  L_TurboDesc = 'Enables higher performance.' -- turbo
  L_CLIPDesc = 'The amount of time, in seconds, before attempting the next cast during the GCD.  Default is 0.15'
 
@@ -1546,6 +1553,7 @@ dark_addon.on_ready(function()
       { type = 'rule' },
       { key = 'tickrate', type = 'spinner', text = L_TickRate, desc = L_TickRateDesc, min = 0.01, max = 1.00, step = 0.05, default = 0.2 }, 
       { key = 'gcd', type = 'checkbox', text = L_GCDC, desc = L_GCDCDesc, default = true },
+      { key = 'btnnotify', type = 'checkbox', text = L_btnnotify, desc = L_btnnotifyDesc, default = false },
       { type = 'spacer' },
       { type = 'spacer' },
       { type = 'header', text = L_Turbo },

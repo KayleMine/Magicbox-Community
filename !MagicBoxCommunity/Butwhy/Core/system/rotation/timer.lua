@@ -33,6 +33,7 @@ local function getValidPotion(Potion_Items)
 			return item 
 		end
 	end
+    return nil
 end
 
 local function iknow(spellID)

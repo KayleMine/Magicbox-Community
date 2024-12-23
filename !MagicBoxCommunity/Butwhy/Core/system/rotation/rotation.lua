@@ -14,7 +14,7 @@ dark_addon.rotation = {
     shaman = { elemental = 262, enhancement = 263, restoration = 264, Initial = 1444 },
     warlock = { affliction = 265, demonology = 266, destruction = 267, Initial = 1454 },
     warrior = { arms = 71, fury = 72, protection = 73, Initial = 1446 },
-    evoker = { devastation = 1467, preservation = 1468, Initial = 1465 },
+    evoker = { devastation = 1467, preservation = 1468, augmentation = 1473, Initial = 1465 },
   },
   rotation_store = { },
   spellbooks = { },
@@ -161,7 +161,7 @@ end
 
 local function init()
   if not loading_wait then
-     C_Timer.After(3.3, function()
+     C_Timer.After(6.3, function()
 		if GetCVar("nameplateShowEnemies") == '0' then
 			SetCVar("nameplateShowEnemies", 1)
 		end

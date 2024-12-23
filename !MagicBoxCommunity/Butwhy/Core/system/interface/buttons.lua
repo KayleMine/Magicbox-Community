@@ -403,7 +403,16 @@ dark_addon.on_ready(function()
       label = dark_addon.interface.icon('toggle-off'),
       color = dark_addon.interface.color.red,
       color2 = dark_addon.interface.color.red
-    }
+    },
+	callback = function(self)
+	if dark_addon.settings.fetch('ssc') == 1 and dark_addon.settings.fetch('_engine_btnnotify', false) then
+		if not dark_addon.environment.hooks.toggle('master_toggle', false) then
+			dark_addon.support.msg('CR:Enabled')
+		else
+			dark_addon.support.msg('CR:Disabled')
+		end
+	end
+    end
   })
   
   dark_addon.interface.buttons.add_toggle({
@@ -420,7 +429,16 @@ dark_addon.on_ready(function()
       label = dark_addon.interface.icon('alarm-clock'),
       color = dark_addon.interface.color.red,
       color2 = dark_addon.interface.color.red
-    }
+    },
+	callback = function(self)
+	if dark_addon.settings.fetch('ssc') == 1 and dark_addon.settings.fetch('_engine_btnnotify', false) then
+		if not dark_addon.environment.hooks.toggle('cooldowns', false) then
+			dark_addon.support.msg('CD:Enabled')
+		else
+			dark_addon.support.msg('CD:Disabled')
+		end
+	end
+    end
   })
 
   dark_addon.interface.buttons.add_toggle({
@@ -437,7 +455,16 @@ dark_addon.on_ready(function()
       label = dark_addon.interface.icon('hand-paper'),
       color = dark_addon.interface.color.red,
       color2 = dark_addon.interface.color.red
-    }
+    },
+	callback = function(self)
+	if dark_addon.settings.fetch('ssc') == 1 and dark_addon.settings.fetch('_engine_btnnotify', false) then
+		if not dark_addon.environment.hooks.toggle('interrupts', false) then
+			dark_addon.support.msg('Kick:Enabled')
+		else
+			dark_addon.support.msg('Kick:Disabled')
+		end
+	end
+    end
   })  
 
 
@@ -463,7 +490,16 @@ if cid == 13 or cid == 11 or cid == 10 or cid == 7 or cid == 5 or cid == 2 then
 		  label = dark_addon.interface.icon('spider-black-widow'),
 		  color = dark_addon.interface.color.red,
 		  color2 = dark_addon.interface.color.red
-		}
+		},
+		callback = function(self)
+		if dark_addon.settings.fetch('ssc') == 1 and dark_addon.settings.fetch('_engine_btnnotify', false) then
+			if not dark_addon.environment.hooks.toggle('blacklist_tgl', false) then
+				dark_addon.support.msg('BL:Enabled')
+			else
+				dark_addon.support.msg('BL:Disabled')
+			end
+		end
+		end
 	})  
 
     dark_addon.interface.buttons.add_toggle({
