@@ -15,6 +15,7 @@ local last_duration = false
 local lastLag = 0
 local castclip = 0
 local turbo = false
+local hookCast = false
 
 
 local function cstng()
@@ -27,9 +28,9 @@ end
 
 local function getValidPotion(Potion_Items)
 	for _, item in ipairs(Potion_Items) do
-		--print(item)
+		---- print(item)
 		if GetItemCount( item, false ) > 0 and GetItemCooldown(item) == 0  then 
-			--print(item, 'pass')
+			---- print(item, 'pass')
 			return item 
 		end
 	end
@@ -84,12 +85,12 @@ local function items()
 
 	local ManaPotions = { 212241, 212240, 212239, 212244, 212243, 212242, 191384 }
 	local HealthPotions = { 211880, 212244, 212243, 212242, 191378, 211879, 211878 } --wowhead
-	--print(PotionsHealth_Check)
+	---- print(PotionsHealth_Check)
 
 	if PotionsHealth_Check and player.alive then
 	local currentHealthPercent = player.health.percent
-	--print(currentHealthPercent)
-	--print(PotionsHealth_Spin)
+	---- print(currentHealthPercent)
+	---- print(PotionsHealth_Spin)
 	if currentHealthPercent <= PotionsHealth_Spin then
 		local potion = getValidPotion(HealthPotions)
 			if potion then
@@ -191,8 +192,6 @@ end
 
 function dark_addon.rotation.pause(spell, unit)
     icon = FlexIcon(spell, 25,25)
-    cooldown_time = dark_addon.environment.hooks.spell(spell).cooldown
-    castable = dark_addon.environment.hooks.castable(spell)
 	setunset(true, spell, unit, icon)
 
 	startTimer(1.3, function()    
@@ -200,6 +199,58 @@ function dark_addon.rotation.pause(spell, unit)
 	end )
 end
 
+function dark_addon.rotation.que(spell, unit)
+	if spell == 6603 or spell == 467718 or spell == 75 then return end
+	if spell == GetSpellInfo(6603) or spell == GetSpellInfo(467718) or spell == GetSpellInfo(75) then return end
+	-- print("Before: ", forced_spell, f_spell, f_unit, f_icon)
+	setunset(true, spell, unit, nil)
+	-- print("After: ", forced_spell, f_spell, f_unit, f_icon)
+	startTimer(1.3, function()    
+		-- print("Before Reset: ", forced_spell, f_spell, f_unit, f_icon)
+		setunset(false, nil, nil, nil)
+		-- print("After Reset: ", forced_spell, f_spell, f_unit, f_icon)
+	end )
+end
+
+
+local function resolve_me()
+	if target and target.alive then
+		return target.unitID
+	end
+	return player.unitID
+end
+setfenv(resolve_me, dark_addon.environment.env)
+
+
+hooksecurefunc("UseAction", function(slot, checkFlags, onSelf)
+	-- -- Exit if the action bar hook is disabled
+	if not hookCast then
+		return
+	end
+	if not UnitAffectingCombat('player') then
+		return
+	end
+
+	-- Fetch action details from the slot
+	local actionType, actionID = GetActionInfo(slot)
+
+	if not actionType or not actionID then
+		return
+	end -- Exit for invalid actions
+
+	-- Resolve the action name based on its type
+	local actionName = (actionType == "spell" and GetSpellInfo(actionID))
+		--or (actionType == "item" and GetItemInfo(actionID))
+		--or (actionType == "macro" and GetMacroInfo(actionID))
+	if not actionName then
+		return
+	end -- Exit if action name can't be resolved
+
+	-- Resolve the appropriate target (player or current target)
+	local resolvedTarget = resolve_me(); --(onSelf or not target) and player or target
+	-- print(FlexIcon(actionID).. " attempted to que at " .. resolvedTarget)
+	dark_addon.rotation.que(actionID, resolvedTarget)
+end)
 
 local stateval = dark_addon.settings.fetch('ssc') 
 local lastGarbageCollection = 0
@@ -216,6 +267,7 @@ end
 
 function dark_addon.rotation.tick(ticker)
 	turbo = dark_addon.settings.fetch('_engine_turbo', false)
+	hookCast = dark_addon.settings.fetch('_engine_hookCast', true)
 	castclip = dark_addon.settings.fetch('_engine_castclip', 0.25)
 	ticker._duration = dark_addon.settings.fetch('_engine_tickrate', 0.2)
 	local _, _, lagHome, lagWorld = GetNetStats()
@@ -236,16 +288,24 @@ function dark_addon.rotation.tick(ticker)
 	
 	togglePlates();
 
+
+-- print('forced_spell: ', forced_spell)
+
 	if not forced_spell then
 	else
-		dark_addon.environment.hooks.cast(f_spell, f_unit)
-		if dark_addon.environment.hooks.spell(f_spell).lastcast then
-			print(f_icon, ' :: you casted at :: ', f_unit)
+		-- print('Attempt to cast: ', f_spell, f_unit)
+		CastSpellByID(f_spell, f_unit)
+		if dark_addon.support.lastcast(f_spell) then 
+			-- print(f_spell, ' :: you casted at :: ', f_unit)
 			forced_spell = false
+			return 
 		end
 		return
 	end
-  
+	
+	if forced_spell then 
+		return 	
+	end
 
 	
 

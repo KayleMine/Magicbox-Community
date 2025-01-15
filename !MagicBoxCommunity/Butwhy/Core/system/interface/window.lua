@@ -1508,6 +1508,8 @@ if (GetLocale() == "ruRU") then
  L_btnnotify =  'Notify кнпк'
  L_Turbo = 'Турбо'
  L_CLIP = 'Клип'
+ L_HookCast = 'Очередь спелов'
+ L_HookCastDesc = 'Добавить спелл в очередь по клику'
 
  L_TickRateDesc = 'Тикрейт ротации в секундах. [0.1 Деф.]'
  L_GCDCDesc = 'Ставить ротацию на паузу при гкд.'
@@ -1525,6 +1527,8 @@ if (GetLocale() == "ruRU") then
  L_btnnotify =  'GCD Check'
  L_Turbo = 'Turbo'
  L_CLIP = 'Clip'
+ L_HookCast = 'Spell que hook'
+ L_HookCastDesc = 'add to que spell by click'
 
  L_TickRateDesc = 'The core ticket rate, in seconds.  Default is 0.1'
  L_GCDCDesc = 'Attempt to pause the rotation during the GCD.'
@@ -1551,15 +1555,17 @@ dark_addon.on_ready(function()
     template = {
       { type = 'header', text = L_Pst },
       { type = 'rule' },
-      { key = 'tickrate', type = 'spinner', text = L_TickRate, desc = L_TickRateDesc, min = 0.01, max = 1.00, step = 0.05, default = 0.2 }, 
+      { key = 'hookCast', type = 'checkbox', text = L_HookCast, desc = L_HookCastDesc, default = true },
+      { type = 'rule' },
+      { key = 'tickrate', type = 'spinner', text = L_TickRate, desc = L_TickRateDesc, min = 0.01, max = 1.00, step = 0.05, default = 0.2, width=88 }, 
       { key = 'gcd', type = 'checkbox', text = L_GCDC, desc = L_GCDCDesc, default = true },
       { key = 'btnnotify', type = 'checkbox', text = L_btnnotify, desc = L_btnnotifyDesc, default = false },
       { type = 'spacer' },
-      { type = 'spacer' },
-      { type = 'header', text = L_Turbo },
+      { type = 'header', text = L_Turbo .. " [Deprecated]" },
       { type = 'rule' },
+      { type = 'text', text = "Not work do not use." },
       { key = 'turbo', type = 'checkbox', text = L_Turbo, desc = L_TurboDesc, default = false },
-      { key = 'castclip', type = 'spinner', text = L_CLIP, desc = L_CLIPDesc, min = 0.00, max = 1.00, step = 0.01, default = 0.15 },
+      { key = 'castclip', type = 'spinner', text = L_CLIP, desc = L_CLIPDesc, min = 0.00, max = 1.00, step = 0.01, default = 0.15, width=88 },
     }
   }
   configWindow = builder.buildGUI(engine)

@@ -299,7 +299,32 @@ dark_addon.Listener:Add("combat_tracker_disabled", "PLAYER_REGEN_DISABLED", func
 end)
 
 
+local _lastcast;
 
+local function handle_combat_log(event, ...)
+    local _, event, _, sourceGUID, _, _, _, destGUID, _, _, _, spellID = ...;
+    if not sourceGUID or sourceGUID == "" then return end
+    if sourceGUID ~= UnitGUID("player") then return end
+    if event == "SPELL_CAST_SUCCESS" then
+		_lastcast = spellID;
+		--print(FlexIcon(_lastcast))		
+    end
+end
+
+local function lastcast(id)
+	if id == _lastcast then
+		return true
+	end
+	return false
+end
+
+dark_addon.Listener:Add("LOG_LastCast_Tracker", "COMBAT_LOG_EVENT_UNFILTERED", function(...)
+	handle_combat_log("COMBAT_LOG_EVENT_UNFILTERED", CombatLogGetCurrentEventInfo())
+end)
+
+support.lastcast = function(id)
+	return lastcast(id)
+end
 
 
 local function onUpdate(self, elapsed)

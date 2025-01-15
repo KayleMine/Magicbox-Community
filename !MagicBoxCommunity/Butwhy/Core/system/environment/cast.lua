@@ -325,7 +325,7 @@ dark_addon.event.register(
     local unitID, lineID, spellID = ...
     local spell = C_Spell.GetSpellInfo(spellID)
     if unitID == "player" then
-      dark_addon.tmp.store("lastcast", spell)
+      dark_addon.tmp.store("lastcast", spellID)
     end
   end
 )
