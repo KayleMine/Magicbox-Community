@@ -20,7 +20,7 @@ function _CastSpellByName(spell, target)
         )
         if secured then
 		  lastcasted_target = target
-          dark_addon.console.debug(2, "cast", "red", FlexIcon(spell,22,22) .. " on " .. target)
+          dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
           -- --dark_addon.interface.status(spell)
         end
       end
@@ -52,7 +52,7 @@ function _CastGroundSpellByName(spell, target)
       ]]
         )
         if secured then
-          dark_addon.console.debug(2, "cast", "red", FlexIcon(spell,22,22) .. " on " .. target)
+          dark_addon.console.debug(2, "cast", "red", spell .. " on " .. target)
           -- --dark_addon.interface.status(spell)
         end
       end
